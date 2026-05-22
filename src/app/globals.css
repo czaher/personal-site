@@ -126,7 +126,7 @@ html {
 }
 
 .nav-link {
-  font-size: 9pt;
+  font-size: 13pt;
   color: #7a6060;
   text-decoration: none;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -137,7 +137,7 @@ html {
 }
 
 .resume-link {
-  font-size: 8pt;
+  font-size: 11pt;
   color: #C97363;
   text-decoration: none;
   font-weight: 500;
@@ -145,4 +145,92 @@ html {
 }
 .resume-link:hover {
   color: #a85a4a;
+}
+
+/* ── Nav responsive ── */
+.nav-desktop {
+  display: flex;
+  gap: 24px;
+}
+.nav-hamburger {
+  display: none !important;
+}
+
+/* ── Mobile nav overlay link hover ── */
+.mobile-nav-link:hover {
+  color: #C97363 !important;
+  transition: color 0.1s ease;
+}
+
+/* ── Resume grid responsive ── */
+.resume-grid {
+  max-width: 820px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 185px 1fr;
+}
+.resume-sidebar {
+  padding: 36px 22px 36px 0;
+}
+.resume-main {
+  padding: 36px 0 36px 32px;
+  font-size: 13pt;
+  line-height: 1.45;
+}
+
+.print-button-row {
+  display: none;
+}
+
+.print-button {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  font-weight: 500;
+  color: #C97363;
+  background: none;
+  border: 1px solid #C97363;
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.print-button:hover {
+  background: #C97363;
+  color: #ffffff;
+}
+
+@media print {
+  nav,
+  .print-button-row {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  #resume {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: flex !important;
+  }
+
+  .resume-grid {
+    grid-template-columns: 1fr;
+  }
+  .resume-sidebar {
+    padding: 24px 0;
+    border-bottom: 1px solid #f2eded;
+  }
+  .resume-main {
+    padding: 24px 0 0 0;
+  }
 }
