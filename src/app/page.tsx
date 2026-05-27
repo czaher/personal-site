@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 import { PrintButton } from '@/components/PrintButton'
 
@@ -34,7 +35,6 @@ function SLabel({ children }: { children: ReactNode }) {
     </div>
   )
 }
-
 
 function SectionHeader({ children }: { children: ReactNode }) {
   return (
@@ -276,8 +276,7 @@ export default function Home() {
               margin: '0 0 16px 0',
             }}
           >
-            I&apos;m a design systems specialist based in Cincinnati, OH —
-            bridging the gap between design intent and engineering execution.
+            I like finding the system hiding inside the chaos.
           </p>
 
           <p
@@ -289,9 +288,9 @@ export default function Home() {
               marginBottom: '36px',
             }}
           >
-            I build component libraries, design tokens, and the workflows that
-            help teams ship consistent, scalable products. Currently at London
-            Computer Systems.
+            I'm a design systems specialist who finds real satisfaction in
+            making things neat, flexible, and built to last. Currently at London
+            Computer Systems in Cincinnati, OH.
           </p>
 
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
