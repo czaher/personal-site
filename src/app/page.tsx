@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 import { PrintButton } from '@/components/PrintButton'
 
@@ -288,7 +287,7 @@ export default function Home() {
               marginBottom: '36px',
             }}
           >
-            I'm a design systems specialist who finds real satisfaction in
+            I&apos;m a design systems specialist who finds real satisfaction in
             making things neat, flexible, and built to last. Currently at London
             Computer Systems in Cincinnati, OH.
           </p>
