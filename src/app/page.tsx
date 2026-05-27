@@ -247,6 +247,69 @@ export default function Home() {
     >
       <Nav />
 
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section id='home' style={{ padding: '96px 24px 80px' }}>
+        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+          <div
+            style={{
+              fontSize: '52pt',
+              fontWeight: 700,
+              lineHeight: 1.0,
+              letterSpacing: '-0.03em',
+              color: C.type,
+              marginBottom: '28px',
+            }}
+          >
+            Corey
+            <br />
+            Zaher
+          </div>
+
+          <p
+            style={{
+              fontSize: '17pt',
+              color: C.t70,
+              lineHeight: 1.45,
+              maxWidth: '500px',
+              marginBottom: '16px',
+              fontWeight: 400,
+              margin: '0 0 16px 0',
+            }}
+          >
+            I&apos;m a design systems specialist based in Cincinnati, OH —
+            bridging the gap between design intent and engineering execution.
+          </p>
+
+          <p
+            style={{
+              fontSize: '13pt',
+              color: C.t50,
+              lineHeight: 1.65,
+              maxWidth: '520px',
+              marginBottom: '36px',
+            }}
+          >
+            I build component libraries, design tokens, and the workflows that
+            help teams ship consistent, scalable products. Currently at London
+            Computer Systems.
+          </p>
+
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <a href='mailto:corey.zaher@gmail.com' className='resume-link'>
+              Email
+            </a>
+            <span style={{ color: C.t30, fontSize: '14pt' }}>·</span>
+            <a href='https://linkedin.com/in/czaher' className='resume-link'>
+              LinkedIn
+            </a>
+            <span style={{ color: C.t30, fontSize: '14pt' }}>·</span>
+            <a href='#resume' className='resume-link'>
+              Resume
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ── Resume ──────────────────────────────────────────── */}
       <section id='resume' style={{ padding: '48px 24px 64px' }}>
         <div className='print-button-row'>
@@ -272,8 +335,8 @@ export default function Home() {
               <div
                 style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}
               >
-                <a href='https://czaher.dev' className='resume-link'>
-                  czaher.dev
+                <a href='https://coreyzaher.com' className='resume-link'>
+                  coreyzaher.com
                 </a>
                 <a
                   href='https://linkedin.com/in/czaher'
