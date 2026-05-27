@@ -335,8 +335,8 @@ export default function Home() {
               <div
                 style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}
               >
-                <a href='https://czaher.dev' className='resume-link'>
-                  czaher.dev
+                <a href='https://coreyzaher.com' className='resume-link'>
+                  coreyzaher.com
                 </a>
                 <a
                   href='https://linkedin.com/in/czaher'
