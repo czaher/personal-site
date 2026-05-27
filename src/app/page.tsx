@@ -247,24 +247,10 @@ export default function Home() {
     >
       <Nav />
 
+      <div className='page-content'>
       {/* ── Hero ────────────────────────────────────────────── */}
       <section id='home' style={{ padding: '96px 24px 80px' }}>
         <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <div
-            style={{
-              fontSize: '52pt',
-              fontWeight: 700,
-              lineHeight: 1.0,
-              letterSpacing: '-0.03em',
-              color: C.type,
-              marginBottom: '28px',
-            }}
-          >
-            Corey
-            <br />
-            Zaher
-          </div>
-
           <p
             style={{
               fontSize: '17pt',
@@ -583,6 +569,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   )
 }
