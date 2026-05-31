@@ -3,9 +3,9 @@ import { Nav } from '@/components/Nav'
 
 const C = {
   type: '#3B2F2F',
-  accent: '#C97363',
+  accent: '#a05b4d',
   t70: '#7a6060',
-  t50: '#a38a8a',
+  t50: '#7d6464',
   t30: '#cdbfbf',
   t10: '#f2eded',
 } as const
@@ -45,28 +45,30 @@ function ExperienceSection({
       )}
       <div style={{ maxWidth: '960px', margin: '0 auto' }}>
         <div style={{ marginBottom: '40px' }}>
-          <div
+          <p
             style={{
               fontSize: '10pt',
               color: C.t50,
               marginBottom: '8px',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
+              margin: '0 0 8px 0',
             }}
           >
             {period}
-          </div>
-          <div
+          </p>
+          <h2
             style={{
               fontSize: '26pt',
               fontWeight: 700,
               color: C.type,
               letterSpacing: '-0.02em',
               lineHeight: 1.1,
+              margin: 0,
             }}
           >
             {role}
-          </div>
+          </h2>
           <div
             style={{
               display: 'flex',
@@ -122,11 +124,12 @@ export default function Home() {
         color: C.type,
       }}
     >
+      <a href='#main-content' className='skip-link'>Skip to main content</a>
       <Nav />
 
-      <div className='page-content'>
+      <main id='main-content' className='page-content'>
         {/* ── Hero ────────────────────────────────────────────── */}
-        <section id='home' style={{ padding: '120px 48px 100px' }}>
+        <section id='home' aria-labelledby='page-heading' style={{ padding: '120px 48px 100px' }}>
           <div
             style={{
               maxWidth: '960px',
@@ -139,6 +142,7 @@ export default function Home() {
             {/* Text */}
             <div style={{ flex: 1 }}>
               <h1
+                id='page-heading'
                 style={{
                   fontFamily: "'Momo Signature', cursive",
                   fontSize: '52pt',
@@ -179,6 +183,8 @@ export default function Home() {
             {/* Image frame */}
             <div className='hero-frame'>
               <svg
+                role='img'
+                aria-label='Photo of Corey Zaher'
                 viewBox='0 0 605 563'
                 xmlns='http://www.w3.org/2000/svg'
                 style={{ width: '100%', height: '100%', display: 'block' }}
@@ -203,7 +209,7 @@ export default function Home() {
         </section>
 
         {/* ── Experience ──────────────────────────────────────── */}
-        <section style={{ borderTop: `1px solid ${C.t10}` }}>
+        <section aria-label='Experience' style={{ borderTop: `1px solid ${C.t10}` }}>
           <ExperienceSection
             id='lcs'
             role='Design System Specialist'
@@ -241,7 +247,7 @@ export default function Home() {
             isLast
           />
         </section>
-      </div>
+      </main>
     </div>
   )
 }

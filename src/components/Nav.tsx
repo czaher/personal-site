@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Menu, X, Mail, Link, Download, type LucideIcon } from 'lucide-react'
 
 const C = {
   type: '#3B2F2F',
-  accent: '#C97363',
-  t50: '#a38a8a',
+  accent: '#a05b4d',
+  t50: '#7d6464',
   t10: '#f2eded',
 } as const
 
@@ -70,7 +70,19 @@ function Icon({ src, shape = 'circle' }: { src: string; shape?: 'circle' | 'roun
 
 export function Nav() {
   const [open, setOpen] = useState(false)
-  const close = () => setOpen(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (open) {
+      closeButtonRef.current?.focus()
+    }
+  }, [open])
+
+  const close = () => {
+    setOpen(false)
+    menuButtonRef.current?.focus()
+  }
 
   return (
     <>
@@ -138,8 +150,11 @@ export function Nav() {
           Corey Zaher
         </a>
         <button
+          ref={menuButtonRef}
           onClick={() => setOpen(true)}
-          aria-label='Open menu'
+          aria-label='Open navigation menu'
+          aria-expanded={open}
+          aria-haspopup='dialog'
           style={{
             background: 'none',
             border: 'none',
@@ -157,6 +172,10 @@ export function Nav() {
       {/* ── Mobile overlay ── */}
       {open && (
         <div
+          role='dialog'
+          aria-modal='true'
+          aria-label='Navigation'
+          onKeyDown={(e) => { if (e.key === 'Escape') close() }}
           style={{
             position: 'fixed',
             inset: 0,
@@ -189,8 +208,9 @@ export function Nav() {
               Corey Zaher
             </span>
             <button
+              ref={closeButtonRef}
               onClick={close}
-              aria-label='Close menu'
+              aria-label='Close navigation menu'
               style={{
                 background: 'none',
                 border: 'none',

@@ -134,6 +134,24 @@ html {
   font-family: var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* ── Skip navigation ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: #3B2F2F;
+  color: #ffffff;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 9999;
+  font-size: 14px;
+  border-radius: 0 0 4px 4px;
+  font-family: var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 /* ── Hero image frame ── */
 .hero-frame {
   flex-shrink: 0;
@@ -167,13 +185,18 @@ html {
   font-size: 9pt;
   color: #7a6060;
   transition: color 0.15s ease;
+  border-radius: 2px;
 }
 .sidebar-item:hover {
-  color: #C97363;
+  color: #a05b4d;
+}
+.sidebar-item:focus-visible {
+  outline: 2px solid #a05b4d;
+  outline-offset: 2px;
 }
 .sidebar-year {
   font-size: 8.5pt;
-  color: #a38a8a;
+  color: #7d6464;
   white-space: nowrap;
   margin-left: 4px;
 }
@@ -186,9 +209,14 @@ html {
   font-size: 9pt;
   color: #7a6060;
   transition: color 0.15s ease;
+  border-radius: 2px;
 }
 .sidebar-contact-item:hover {
-  color: #C97363;
+  color: #a05b4d;
+}
+.sidebar-contact-item:focus-visible {
+  outline: 2px solid #a05b4d;
+  outline-offset: 2px;
 }
 
 .mobile-topbar {
