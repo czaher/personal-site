@@ -1,232 +1,110 @@
-import type { ReactNode } from 'react'
+import Image from 'next/image'
 import { Nav } from '@/components/Nav'
-import { PrintButton } from '@/components/PrintButton'
 
 const C = {
   type: '#3B2F2F',
   accent: '#C97363',
-  t90: '#4f4040',
   t70: '#7a6060',
   t50: '#a38a8a',
   t30: '#cdbfbf',
   t10: '#f2eded',
-  aMuted: '#d9977f',
 } as const
 
-const F = "'Helvetica Neue', Helvetica, Arial, sans-serif"
+const F = "var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif"
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function SLabel({ children }: { children: ReactNode }) {
+function ExperienceSection({
+  id,
+  role,
+  company,
+  period,
+  logo,
+  logoShape = 'circle',
+  isLast,
+}: {
+  id?: string
+  role: string
+  company: string
+  period: string
+  logo: string
+  logoShape?: 'circle' | 'rounded'
+  isLast?: boolean
+}) {
   return (
-    <div
-      style={{
-        fontSize: '10.5pt',
-        fontWeight: 700,
-        textTransform: 'uppercase',
-        letterSpacing: '0.1em',
-        color: C.accent,
-        marginBottom: '8px',
-        marginTop: '20px',
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
-function SectionHeader({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        fontSize: '18pt',
-        fontWeight: 700,
-        color: C.accent,
-        letterSpacing: '-0.01em',
-        marginBottom: '14px',
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
-function Bullets({ items }: { items: string[] }) {
-  return (
-    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-      {items.map((b, i) => (
-        <li
-          key={i}
-          style={{
-            fontSize: '12pt',
-            color: C.type,
-            paddingLeft: '10px',
-            position: 'relative',
-            lineHeight: 1.5,
-            marginBottom: '3px',
-          }}
-        >
-          <span
+    <div id={id} style={{ padding: '64px 48px', position: 'relative' }}>
+      {!isLast && (
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '48px',
+          right: '48px',
+          height: '1px',
+          backgroundColor: C.t10,
+        }} />
+      )}
+      <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '40px' }}>
+          <div
             style={{
-              position: 'absolute',
-              left: 0,
-              color: C.aMuted,
-              fontSize: '13pt',
-              lineHeight: 1.5,
+              fontSize: '10pt',
+              color: C.t50,
+              marginBottom: '8px',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
             }}
           >
-            •
-          </span>
-          {b}
-        </li>
-      ))}
-    </ul>
-  )
-}
+            {period}
+          </div>
+          <div
+            style={{
+              fontSize: '26pt',
+              fontWeight: 700,
+              color: C.type,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+            }}
+          >
+            {role}
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              marginTop: '8px',
+            }}
+          >
+            <Image
+              src={logo}
+              alt={company}
+              width={28}
+              height={28}
+              style={{
+                borderRadius: logoShape === 'circle' ? '50%' : '5px',
+                objectFit: 'contain',
+                flexShrink: 0,
+              }}
+            />
+            <div style={{ fontSize: '14pt', color: C.accent, fontWeight: 500 }}>
+              {company}
+            </div>
+          </div>
+        </div>
 
-function Job({
-  title,
-  company,
-  meta,
-  bullets,
-  children,
-  isLast,
-}: {
-  title: string
-  company: string
-  meta: string
-  bullets: string[]
-  children?: ReactNode
-  isLast?: boolean
-}) {
-  return (
-    <div
-      style={{
-        marginBottom: isLast ? 0 : '16px',
-        paddingBottom: isLast ? 0 : '16px',
-        borderBottom: isLast ? 'none' : `1px solid ${C.t10}`,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-        }}
-      >
         <div
           style={{
-            fontSize: '17pt',
-            fontWeight: 700,
-            color: C.type,
-            lineHeight: 1.2,
+            border: `1px dashed ${C.t30}`,
+            borderRadius: '8px',
+            padding: '48px 32px',
+            color: C.t50,
+            fontSize: '11pt',
+            textAlign: 'center',
+            fontStyle: 'italic',
           }}
         >
-          {title}
+          Projects coming soon
         </div>
-        <div
-          style={{
-            fontSize: '13pt',
-            color: C.t70,
-            whiteSpace: 'nowrap',
-            marginLeft: '12px',
-          }}
-        >
-          {company}
-        </div>
-      </div>
-      <div
-        style={{
-          fontSize: '10.5pt',
-          color: C.t50,
-          marginTop: '1px',
-          marginBottom: '6px',
-        }}
-      >
-        {meta}
-      </div>
-      <Bullets items={bullets} />
-      {children}
-    </div>
-  )
-}
-
-function SubRole({
-  title,
-  date,
-  bullets,
-}: {
-  title: string
-  date: string
-  bullets: string[]
-}) {
-  return (
-    <div
-      style={{
-        marginTop: '10px',
-        paddingTop: '10px',
-        borderTop: `1px dashed ${C.t30}`,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          marginBottom: '5px',
-        }}
-      >
-        <div style={{ fontSize: '13pt', fontWeight: 700, color: C.t90 }}>
-          {title}
-        </div>
-        <div style={{ fontSize: '10.5pt', color: C.t50 }}>{date}</div>
-      </div>
-      <Bullets items={bullets} />
-    </div>
-  )
-}
-
-function EduBlock({
-  name,
-  credential,
-  meta,
-  details,
-  isLast,
-}: {
-  name: string
-  credential: string
-  meta: string
-  details: string
-  isLast?: boolean
-}) {
-  return (
-    <div style={{ marginBottom: isLast ? 0 : '14px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-        }}
-      >
-        <div style={{ fontSize: '17pt', fontWeight: 700, color: C.type }}>
-          {name}
-        </div>
-        <div
-          style={{
-            fontSize: '13pt',
-            color: C.t70,
-            whiteSpace: 'nowrap',
-            marginLeft: '12px',
-          }}
-        >
-          {credential}
-        </div>
-      </div>
-      <div style={{ fontSize: '10.5pt', color: C.t50, marginTop: '1px' }}>
-        {meta}
-      </div>
-      <div style={{ fontSize: '12pt', color: C.t70, marginTop: '3px' }}>
-        {details}
       </div>
     </div>
   )
@@ -246,341 +124,124 @@ export default function Home() {
     >
       <Nav />
 
-      {/* ── Hero ────────────────────────────────────────────── */}
-      <section id='home' style={{ padding: '96px 24px 80px' }}>
-        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+      <div className='page-content'>
+        {/* ── Hero ────────────────────────────────────────────── */}
+        <section id='home' style={{ padding: '120px 48px 100px' }}>
           <div
             style={{
-              fontSize: '52pt',
-              fontWeight: 700,
-              lineHeight: 1.0,
-              letterSpacing: '-0.03em',
-              color: C.type,
-              marginBottom: '28px',
+              maxWidth: '960px',
+              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '80px',
             }}
           >
-            Corey
-            <br />
-            Zaher
-          </div>
-
-          <p
-            style={{
-              fontSize: '17pt',
-              color: C.t70,
-              lineHeight: 1.45,
-              maxWidth: '500px',
-              marginBottom: '16px',
-              fontWeight: 400,
-              margin: '0 0 16px 0',
-            }}
-          >
-            I like finding the system hiding inside the chaos.
-          </p>
-
-          <p
-            style={{
-              fontSize: '13pt',
-              color: C.t50,
-              lineHeight: 1.65,
-              maxWidth: '520px',
-              marginBottom: '36px',
-            }}
-          >
-            I&apos;m a design systems specialist who finds real satisfaction in
-            making things neat, flexible, and built to last. Currently at London
-            Computer Systems in Cincinnati, OH.
-          </p>
-
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <a href='mailto:corey.zaher@gmail.com' className='resume-link'>
-              Email
-            </a>
-            <span style={{ color: C.t30, fontSize: '14pt' }}>·</span>
-            <a href='https://linkedin.com/in/czaher' className='resume-link'>
-              LinkedIn
-            </a>
-            <span style={{ color: C.t30, fontSize: '14pt' }}>·</span>
-            <a href='#resume' className='resume-link'>
-              Resume
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Resume ──────────────────────────────────────────── */}
-      <section id='resume' style={{ padding: '48px 24px 64px' }}>
-        <div className='print-button-row'>
-          <PrintButton />
-        </div>
-        <div className='resume-grid'>
-          {/* Sidebar */}
-          <aside className='resume-sidebar'>
-            <div style={{ marginBottom: '22px' }}>
-              <div
+            {/* Text */}
+            <div style={{ flex: 1 }}>
+              <h1
                 style={{
-                  fontSize: '30pt',
-                  fontWeight: 700,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.02em',
-                  marginBottom: '8px',
-                }}
-              >
-                Corey
-                <br />
-                Zaher
-              </div>
-              <div
-                style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}
-              >
-                <a href='https://coreyzaher.com' className='resume-link'>
-                  coreyzaher.com
-                </a>
-                <a
-                  href='https://linkedin.com/in/czaher'
-                  className='resume-link'
-                >
-                  linkedin.com/in/czaher
-                </a>
-              </div>
-              <div
-                style={{
-                  marginTop: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '2px',
-                }}
-              >
-                <span style={{ fontSize: '11pt', color: C.t70 }}>
-                  corey.zaher@gmail.com
-                </span>
-                <span style={{ fontSize: '11pt', color: C.t70 }}>
-                  Cincinnati, OH
-                </span>
-              </div>
-            </div>
-
-            <SLabel>Skills</SLabel>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {[
-                'Design Systems',
-                'Component Libraries',
-                'Design Tokens',
-                'UX/UI Design',
-                'Design–Dev Handoff',
-                'Figma Plugin Development',
-                'Project Management',
-              ].map((s) => (
-                <li
-                  key={s}
-                  style={{
-                    fontSize: '12pt',
-                    color: C.type,
-                    padding: '3px 0',
-                    borderBottom: `1px solid ${C.t10}`,
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {s}
-                </li>
-              ))}
-            </ul>
-
-            <SLabel>Awards</SLabel>
-            <div style={{ fontSize: '11pt', color: C.t70, lineHeight: 1.5 }}>
-              <strong
-                style={{
-                  display: 'block',
-                  fontWeight: 700,
+                  fontFamily: "'Momo Signature', cursive",
+                  fontSize: '52pt',
+                  fontWeight: 'normal',
                   color: C.type,
-                  marginBottom: '2px',
+                  lineHeight: 1.1,
+                  margin: '0 0 28px 0',
                 }}
               >
-                Ameritas Award for Senior Design Project in Workflow
-                Optimization &amp; Automation
-              </strong>
-              <div
-                style={{ fontSize: '10.5pt', color: C.t50, marginTop: '2px' }}
+                Hey, I&apos;m Corey
+              </h1>
+              <p
+                style={{
+                  fontSize: '17pt',
+                  color: C.t70,
+                  lineHeight: 1.45,
+                  fontWeight: 400,
+                  margin: '0 0 20px 0',
+                }}
               >
-                April 2022
-              </div>
+                I like finding the system hiding inside the chaos.
+              </p>
+
+              <p
+                style={{
+                  fontSize: '13pt',
+                  color: C.t50,
+                  lineHeight: 1.65,
+                  marginBottom: '44px',
+                }}
+              >
+                I&apos;m a design systems specialist who finds real satisfaction
+                in making things neat, flexible, and built to last. Currently at
+                London Computer Systems in Cincinnati, OH.
+              </p>
             </div>
 
-            <SLabel>Tools</SLabel>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {[
-                'Figma',
-                'Zeplin',
-                'Adobe Creative Suite',
-                'JavaScript',
-                'HTML / CSS',
-                'React',
-                'Node.js',
-                'GraphQL',
-                'Python',
-                'Monday.com',
-              ].map((t) => (
-                <li
-                  key={t}
-                  style={{
-                    fontSize: '12pt',
-                    color: C.type,
-                    padding: '3px 0',
-                    borderBottom: `1px solid ${C.t10}`,
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </aside>
-
-          {/* Main content */}
-          <main className='resume-main'>
-            <section>
-              <SectionHeader>Experience</SectionHeader>
-
-              <Job
-                title='Design System Specialist'
-                company='London Computer Systems'
-                meta='Landen, OH  |  Apr. 2025 – Present'
-                bullets={[
-                  'Own and maintain the design system and Figma component library for Rent Manager Express (RMX), a large-scale property management SaaS product.',
-                  'Conducted a comprehensive UI audit spanning 550+ issues across 182 product features, presenting findings and remediation strategy to product leadership.',
-                  'Architected and led a full overhaul of the RMX Pre-made Pages library, establishing a scalable component and template ecosystem.',
-                  'Created a "recycling center" Figma workflow enabling designers to submit finalized screens for systematic library reuse, reducing redundant design work.',
-                  'Serve as a design system advocate, leading training sessions and promoting DS adoption across product teams.',
-                  'Proposed and scoped a team expansion plan growing the design system team from 2 to 6 specialists with distinct product-facing and engineering-facing tracks.',
-                ]}
+            {/* Image frame */}
+            <div className='hero-frame'>
+              <svg
+                viewBox='0 0 605 563'
+                xmlns='http://www.w3.org/2000/svg'
+                style={{ width: '100%', height: '100%', display: 'block' }}
               >
-                <SubRole
-                  title='UI Designer — qManage'
-                  date='Aug. 2024 – Apr. 2025'
-                  bullets={[
-                    'Designed UI components and screen flows for qManage, a standalone LCS product outside of the core Rent Manager suite.',
-                    'Maintained Figma libraries and contributed to component standardization ahead of the company-wide product restructure.',
-                  ]}
+                <defs>
+                  <clipPath id='paper-clip'>
+                    <path d='M123.993 218.268C110.395 190.128 96.3504 163.392 85.744 135.065C79.8003 119.191 75.4065 102.845 70.5898 86.5403C77.3824 80.891 83.6529 75.4026 90.2034 70.2938C109.958 54.8922 130.11 40.0401 151.567 27.0639C154.959 25.0071 158.753 23.4157 162.549 22.2376C198.999 10.9956 236.545 5.63689 274.376 1.95467C281.81 1.22656 289.291 0.83725 296.725 0.223351C305.741 -0.51379 314.51 0.569691 323.103 3.53351C341.543 23.8666 355.011 47.6901 369.385 70.8744C374.998 79.922 380.758 88.8905 385.973 98.1713C390.581 106.354 394.528 114.921 399.127 124.041C402.122 122.46 405.945 121.046 409.052 118.694C416.229 113.221 423.832 109.259 432.971 108.181C436.866 107.724 440.594 105.875 444.375 104.579C446.761 103.764 449.104 102.825 451.479 101.936C452.824 101.43 454.397 101.219 455.479 100.38C462.803 94.7709 471.7 93.3935 480.186 90.8081C485.619 89.1499 490.853 86.8893 496.65 84.7194C500.244 87.3942 503.81 89.7635 507.048 92.4963C527.711 109.94 544.289 130.857 558.555 153.659C572.337 175.678 583.592 198.991 593.464 222.972C597.285 232.249 600.428 241.807 604.09 251.816C588.98 265.999 572.698 278.224 556.327 290.342C539.94 302.471 523.446 314.446 506.458 326.888C515.966 332.959 526.326 336.456 536.141 340.991C546.328 345.699 556.636 350.137 566.934 354.559C576.947 358.856 587.024 363.012 596.955 367.176C596.791 395.894 565.874 480.557 544.549 510.321C518.646 502.61 494.46 489.997 469.045 479.085C468.495 481.403 467.805 483.233 467.66 485.106C466.77 497.138 466.682 509.275 465.021 521.196C463.518 531.972 460.441 542.546 457.827 553.144C457.084 556.157 455.505 558.971 454.402 561.642C408.046 567.232 259.267 545.18 217.511 525.736C217.581 509.836 217.657 493.611 217.722 476.713C210.278 478.207 203.517 479.28 196.901 480.943C177.262 485.894 157.288 488.117 137.091 488.337C124.087 488.484 111.308 490.08 98.5418 492.405C90.6265 493.844 82.6068 494.704 74.6155 495.684C72.6662 495.919 70.66 495.614 68.4789 495.566C59.3881 481.736 51.3006 467.517 44.1341 452.777C24.3612 412.139 11.0413 369.445 3.22364 324.98C2.86713 323.002 2.64791 320.986 2.11048 319.05C1.58014 317.145 0.714911 315.331 0.000449672 313.482C4.74295 296.37 36.987 224.237 43.76 215.85C70.1648 216.646 96.8519 217.453 124.006 218.271L123.993 218.268Z' />
+                  </clipPath>
+                </defs>
+                <image
+                  href='/me-cropped.jpg'
+                  x='0'
+                  y='0'
+                  width='605'
+                  height='563'
+                  clipPath='url(#paper-clip)'
+                  preserveAspectRatio='xMidYMin slice'
                 />
-                <SubRole
-                  title='UX Analyst'
-                  date='Sep. 2023 – Aug. 2024'
-                  bullets={[
-                    'Designed product experiences for Rent Manager based on customer research and business requirements, collaborating with Business Analysts and UI Design teams.',
-                    'Conducted exploratory and concept-validation research to inform feature development and surface user pain points.',
-                  ]}
-                />
-              </Job>
-
-              <Job
-                title='Product Designer'
-                company='SupplyHive™'
-                meta='Chicago, IL / Remote  |  May 2022 – Mar. 2023'
-                bullets={[
-                  "Led product design for a supplier performance management platform serving Fortune 500 clients including McDonald's and Meta.",
-                  'Owned end-to-end design from requirements gathering with C-suite stakeholders to high-fidelity mockups and developer handoff.',
-                  'Built and maintained an internal design system and component library, ensuring visual and functional consistency across the platform.',
-                  'Partnered with the sales team to translate client feedback and prospect needs into new feature concepts and roadmap priorities.',
-                  'Contributed to marketing by maintaining the WordPress landing site and authoring email newsletter campaigns for client audiences.',
-                  'Participated in all Agile ceremonies with the development team, bridging design intent and engineering execution.',
-                ]}
-              />
-
-              <Job
-                title='Product Development Engineer'
-                company='Refract Labs LLC'
-                meta='Cincinnati, OH / Hybrid  |  Sep. 2020 – Apr. 2022'
-                bullets={[
-                  'Joined as a founding-stage frontend developer (4th employee), building web applications for startup and enterprise clients.',
-                  'Grew into a project management role, leading Scrum ceremonies, sprint planning, and retrospectives across multiple client projects.',
-                  'Transitioned into product engineering, owning requirements documentation, user stories, wireframes, and high-fidelity Figma mockups.',
-                  'Interfaced directly with clients in prospect calls and project reviews, managing scope alignment and stakeholder expectations.',
-                  'Assisted with developer interviews and hiring, contributing to team growth from a small startup to a multi-product agency.',
-                ]}
-              />
-
-              <Job
-                title='Information Technology Consultant'
-                company='UC Lindner College of Business'
-                meta='Cincinnati, OH  |  Oct. 2019 – Dec. 2020'
-                bullets={[
-                  'Provided L1/L2 IT support to students and faculty, managing service request queues in ServiceNow.',
-                  'Wrote and maintained Python automation scripts to integrate disparate technologies and improve team workflows.',
-                  'Managed loaner device fleets, software license inventories, and enterprise network administration tasks.',
-                ]}
-              />
-
-              <Job
-                title='Behavior Analyst Apprentice'
-                company='iQ4'
-                meta='Remote  |  Mar. 2020 – Apr. 2020'
-                isLast
-                bullets={[
-                  'Applied NICE (National Initiative for Cybersecurity Education) frameworks to a team-based case study with 8 cybersecurity apprentices.',
-                  'Earned a U.S. Department of Labor–recognized cybersecurity credential through the Cybersecurity Workforce Alliance.',
-                ]}
-              />
-            </section>
-
-            <section style={{ marginTop: '24px' }}>
-              <SectionHeader>Education</SectionHeader>
-              <EduBlock
-                name='University of Cincinnati'
-                credential='B.S. Information Technology'
-                meta='Cincinnati, OH  |  May 2022'
-                details="Software Development Concentration  ·  Dean's List  ·  GPA 3.46"
-              />
-              <EduBlock
-                name='Bio-Med Science Academy'
-                credential='Graduate'
-                meta='Rootstown, OH  |  May 2017'
-                details='Student Council President  ·  Honors Graduate  ·  400+ Internship Hours  ·  150+ Volunteer Hours'
-                isLast
-              />
-            </section>
-          </main>
-        </div>
-      </section>
-
-      {/* ── Projects ────────────────────────────────────────── */}
-      <section
-        id='projects'
-        style={{ borderTop: `1px solid ${C.t10}`, padding: '80px 24px' }}
-      >
-        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <SectionHeader>Projects</SectionHeader>
-          <p style={{ fontSize: '13pt', color: C.t50 }}>Coming soon.</p>
-        </div>
-      </section>
-
-      {/* ── About ───────────────────────────────────────────── */}
-      <section
-        id='about'
-        style={{ borderTop: `1px solid ${C.t10}`, padding: '80px 24px' }}
-      >
-        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <SectionHeader>About</SectionHeader>
-          <p style={{ fontSize: '13pt', color: C.t50 }}>Coming soon.</p>
-        </div>
-      </section>
-
-      {/* ── Contact ─────────────────────────────────────────── */}
-      <section
-        id='contact'
-        style={{ borderTop: `1px solid ${C.t10}`, padding: '80px 24px' }}
-      >
-        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <SectionHeader>Contact</SectionHeader>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <a href='mailto:corey.zaher@gmail.com' className='resume-link'>
-              corey.zaher@gmail.com
-            </a>
-            <a href='https://linkedin.com/in/czaher' className='resume-link'>
-              linkedin.com/in/czaher
-            </a>
+              </svg>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* ── Experience ──────────────────────────────────────── */}
+        <section style={{ borderTop: `1px solid ${C.t10}` }}>
+          <ExperienceSection
+            id='lcs'
+            role='Design System Specialist'
+            company='London Computer Systems'
+            period='Apr. 2025 – Present'
+            logo='/LCS.svg'
+          />
+          <ExperienceSection
+            role='UI Designer · UX Analyst'
+            company='London Computer Systems'
+            period='Sep. 2023 – Apr. 2025'
+            logo='/LCS.svg'
+          />
+          <ExperienceSection
+            id='supplyhive'
+            role='Product Designer'
+            company='SupplyHive™'
+            period='May 2022 – Mar. 2023'
+            logo='/SH.svg'
+          />
+          <ExperienceSection
+            id='refract'
+            role='Product Development Engineer'
+            company='Refract Labs LLC'
+            period='Sep. 2020 – Apr. 2022'
+            logo='/RL.svg'
+            logoShape='rounded'
+          />
+          <ExperienceSection
+            id='uc'
+            role='Information Technology Consultant'
+            company='UC Lindner College of Business'
+            period='Oct. 2019 – Dec. 2020'
+            logo='/UC.svg'
+            isLast
+          />
+        </section>
+      </div>
     </div>
   )
 }

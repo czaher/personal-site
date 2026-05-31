@@ -1,114 +1,278 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
+import Image from 'next/image'
+import { Menu, X, Mail, Link, Download, type LucideIcon } from 'lucide-react'
 
 const C = {
   type: '#3B2F2F',
-  t10:  '#f2eded',
+  accent: '#C97363',
+  t50: '#a38a8a',
+  t10: '#f2eded',
 } as const
 
-const F = "'Helvetica Neue', Helvetica, Arial, sans-serif"
-const LINKS = ['Resume', 'Projects', 'About', 'Contact']
+const F = "var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif"
+
+type WorkItem = { label: string; href: string; year: string; icon: string; iconShape?: 'circle' | 'rounded' }
+type ContactItem = { label: string; href: string; download?: boolean; icon: LucideIcon }
+
+const WORK: WorkItem[] = [
+  {
+    label: 'London Computer Systems',
+    href: '#lcs',
+    year: 'now',
+    icon: '/LCS.svg',
+  },
+  { label: 'SupplyHive', href: '#supplyhive', year: '2023', icon: '/SH.svg' },
+  { label: 'Refract Labs', href: '#refract', year: '2022', icon: '/RL.svg', iconShape: 'rounded' },
+  {
+    label: 'University of Cincinnati',
+    href: '#uc',
+    year: '2020',
+    icon: '/UC.svg',
+  },
+]
+
+const CONTACT: ContactItem[] = [
+  { label: 'Email', href: 'mailto:corey.zaher@gmail.com', icon: Mail },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/czaher', icon: Link },
+  { label: 'Resume', href: '/Corey_Zaher_Resume.pdf', download: true, icon: Download },
+]
+
+function SideLabel({ children }: { children: string }) {
+  return (
+    <div
+      style={{
+        fontSize: '8pt',
+        fontWeight: 600,
+        color: C.t50,
+        letterSpacing: '0.1em',
+        textTransform: 'uppercase',
+        marginBottom: '10px',
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function Icon({ src, shape = 'circle' }: { src: string; shape?: 'circle' | 'rounded' }) {
+  return (
+    <Image
+      src={src}
+      alt=''
+      width={24}
+      height={24}
+      style={{ borderRadius: shape === 'circle' ? '50%' : '4px', flexShrink: 0, objectFit: 'contain' }}
+    />
+  )
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [open])
-
   const close = () => setOpen(false)
 
   return (
     <>
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 50, fontFamily: F,
-        backgroundColor: 'rgba(255,255,255,0.9)',
-        backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-        borderBottom: `1px solid ${C.t10}`,
-      }}>
-        <div style={{
-          maxWidth: '900px', margin: '0 auto', padding: '14px 24px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        }}>
-          <a href="#" style={{
-            fontSize: '13pt', fontWeight: 700, color: C.type,
-            textDecoration: 'none', letterSpacing: '-0.01em',
-          }}>
-            Corey Zaher
-          </a>
+      {/* ── Desktop sidebar ── */}
+      <nav className='sidebar-nav' style={{ fontFamily: F }}>
+        <a
+          href='#home'
+          style={{
+            display: 'block',
+            fontSize: '14pt',
+            fontWeight: 700,
+            color: C.type,
+            textDecoration: 'none',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.15,
+            marginBottom: '36px',
+          }}
+        >
+          Corey Zaher
+        </a>
 
-          {/* Desktop links */}
-          <div className="nav-desktop">
-            {LINKS.map(s => (
-              <a key={s} href={`#${s.toLowerCase()}`} className="nav-link">{s}</a>
+        <div style={{ marginBottom: '28px' }}>
+          <SideLabel>Work</SideLabel>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {WORK.map((item) => (
+              <a key={item.href} href={item.href} className='sidebar-item'>
+                <Icon src={item.icon} shape={item.iconShape} />
+                <span style={{ flex: 1, minWidth: 0 }}>{item.label}</span>
+                <span className='sidebar-year'>{item.year}</span>
+              </a>
             ))}
           </div>
+        </div>
 
-          {/* Mobile hamburger */}
-          <button
-            className="nav-hamburger"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: C.type, display: 'flex', alignItems: 'center' }}
-          >
-            <Menu size={20} />
-          </button>
+        <div>
+          <SideLabel>Contact</SideLabel>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {CONTACT.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                download={item.download}
+                className='sidebar-contact-item'
+              >
+                <item.icon size={14} strokeWidth={1.75} />
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
 
-      {/* Mobile overlay */}
+      {/* ── Mobile top bar ── */}
+      <div className='mobile-topbar' style={{ fontFamily: F }}>
+        <a
+          href='#home'
+          style={{
+            fontSize: '13pt',
+            fontWeight: 700,
+            color: C.type,
+            textDecoration: 'none',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          Corey Zaher
+        </a>
+        <button
+          onClick={() => setOpen(true)}
+          aria-label='Open menu'
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px',
+            color: C.type,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Menu size={20} />
+        </button>
+      </div>
+
+      {/* ── Mobile overlay ── */}
       {open && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 100, fontFamily: F,
-          backgroundColor: 'rgba(255,255,255,0.93)',
-          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-          display: 'flex', flexDirection: 'column',
-        }}>
-          {/* Top bar mirrors nav */}
-          <div style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '14px 24px', borderBottom: `1px solid ${C.t10}`,
-          }}>
-            <span style={{ fontSize: '13pt', fontWeight: 700, color: C.type, letterSpacing: '-0.01em' }}>
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 100,
+            fontFamily: F,
+            backgroundColor: 'rgba(255,255,255,0.97)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '14px 24px',
+              borderBottom: `1px solid ${C.t10}`,
+            }}
+          >
+            <span
+              style={{
+                fontSize: '13pt',
+                fontWeight: 700,
+                color: C.type,
+                letterSpacing: '-0.01em',
+              }}
+            >
               Corey Zaher
             </span>
             <button
               onClick={close}
-              aria-label="Close menu"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: C.type, display: 'flex', alignItems: 'center' }}
+              aria-label='Close menu'
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px',
+                color: C.type,
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
               <X size={20} />
             </button>
           </div>
-
-          {/* Large nav links */}
-          <div style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            justifyContent: 'center', padding: '0 32px', gap: '4px',
-          }}>
-            {LINKS.map(s => (
-              <a
-                key={s}
-                href={`#${s.toLowerCase()}`}
-                onClick={close}
-                className="mobile-nav-link"
-                style={{
-                  fontSize: '30pt', fontWeight: 700, color: C.type,
-                  textDecoration: 'none', letterSpacing: '-0.03em', lineHeight: 1.25,
-                }}
-              >
-                {s}
-              </a>
-            ))}
-          </div>
-
-          {/* Footer contact links */}
-          <div style={{ padding: '24px 32px', borderTop: `1px solid ${C.t10}`, display: 'flex', gap: '20px' }}>
-            <a href="mailto:corey.zaher@gmail.com" className="nav-link">Email</a>
-            <a href="https://linkedin.com/in/czaher" className="nav-link">LinkedIn</a>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '32px 24px' }}>
+            <div style={{ marginBottom: '28px' }}>
+              <SideLabel>Work</SideLabel>
+              {WORK.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={close}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 0',
+                    textDecoration: 'none',
+                    borderBottom: `1px solid ${C.t10}`,
+                  }}
+                >
+                  <Image
+                    src={item.icon}
+                    alt=''
+                    width={32}
+                    height={32}
+                    style={{
+                      borderRadius: item.iconShape === 'rounded' ? '6px' : '50%',
+                      flexShrink: 0,
+                      objectFit: 'contain',
+                    }}
+                  />
+                  <span
+                    style={{
+                      flex: 1,
+                      fontSize: '14pt',
+                      fontWeight: 600,
+                      color: C.type,
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                  <span style={{ fontSize: '11pt', color: C.t50 }}>
+                    {item.year}
+                  </span>
+                </a>
+              ))}
+            </div>
+            <div>
+              <SideLabel>Contact</SideLabel>
+              {CONTACT.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  download={item.download}
+                  onClick={close}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 0',
+                    textDecoration: 'none',
+                    fontSize: '14pt',
+                    fontWeight: 600,
+                    color: C.type,
+                    borderBottom: `1px solid ${C.t10}`,
+                  }}
+                >
+                  <item.icon size={20} strokeWidth={1.75} />
+                  {item.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       )}
