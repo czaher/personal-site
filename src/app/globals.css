@@ -121,30 +121,24 @@
   }
 }
 
+@font-face {
+  font-family: 'Momo Signature';
+  src: url('/fonts/MomoSignature-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.nav-link {
-  font-size: 11pt;
-  color: #7a6060;
-  text-decoration: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  transition: color 0.15s ease;
-}
-.nav-link:hover {
-  color: #C97363;
-}
-
-.resume-link {
-  font-size: 11pt;
-  color: #C97363;
-  text-decoration: none;
-  font-weight: 500;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-.resume-link:hover {
-  color: #a85a4a;
+/* ── Hero image frame ── */
+.hero-frame {
+  flex-shrink: 0;
+  width: 340px;
+  height: 360px;
 }
 
 /* ── Sidebar nav ── */
@@ -152,86 +146,68 @@ html {
   position: fixed;
   left: 0;
   top: 0;
-  width: 180px;
+  width: 220px;
   height: 100vh;
-  padding: 48px 32px;
+  padding: 48px 20px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #f2eded;
   background: #ffffff;
   z-index: 50;
+  border: none;
+  outline: none;
+  overflow: hidden;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  text-decoration: none;
+  font-size: 9pt;
+  color: #7a6060;
+  transition: color 0.15s ease;
+}
+.sidebar-item:hover {
+  color: #C97363;
+}
+.sidebar-year {
+  font-size: 8.5pt;
+  color: #a38a8a;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+.sidebar-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 0;
+  text-decoration: none;
+  font-size: 9pt;
+  color: #7a6060;
+  transition: color 0.15s ease;
+}
+.sidebar-contact-item:hover {
+  color: #C97363;
 }
 
 .mobile-topbar {
   display: none;
 }
 
-/* ── Mobile nav overlay link hover ── */
-.mobile-nav-link:hover {
-  color: #C97363 !important;
-  transition: color 0.1s ease;
-}
-
 /* ── Page content offset ── */
 .page-content {
-  margin-left: 180px;
-}
-
-/* ── Resume grid responsive ── */
-.resume-grid {
-  max-width: 820px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 185px 1fr;
-}
-.resume-sidebar {
-  padding: 36px 22px 36px 0;
-}
-.resume-main {
-  padding: 36px 0 36px 32px;
-  font-size: 13pt;
-  line-height: 1.45;
-}
-
-.print-button-row {
-  display: none;
-}
-
-.print-button {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 11pt;
-  font-weight: 500;
-  color: #C97363;
-  background: none;
-  border: 1px solid #C97363;
-  border-radius: 4px;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.print-button:hover {
-  background: #C97363;
-  color: #ffffff;
+  margin-left: 220px;
 }
 
 @media print {
   .sidebar-nav,
-  .mobile-topbar,
-  .print-button-row {
+  .mobile-topbar {
     display: none !important;
   }
 
   .page-content {
     margin-left: 0 !important;
-  }
-
-  body {
-    background: #ffffff;
-  }
-
-  #resume {
-    padding: 0 !important;
   }
 }
 
@@ -259,14 +235,8 @@ html {
     margin-left: 0;
   }
 
-  .resume-grid {
-    grid-template-columns: 1fr;
+  .hero-frame {
+    display: none;
   }
-  .resume-sidebar {
-    padding: 24px 0;
-    border-bottom: 1px solid #f2eded;
-  }
-  .resume-main {
-    padding: 24px 0 0 0;
-  }
+
 }
