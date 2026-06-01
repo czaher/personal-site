@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import './globals.css'
 
 const manrope = Manrope({
@@ -20,7 +21,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${manrope.variable} antialiased`}>{children}</body>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}})()`,
+          }}
+        />
+      </head>
+      <body className={`${manrope.variable} antialiased`}>
+        {children}
+        <ThemeToggle />
+      </body>
     </html>
   )
 }

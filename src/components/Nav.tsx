@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { Menu, X, Mail, Link, Download, type LucideIcon } from 'lucide-react'
 
 const C = {
-  type: '#3B2F2F',
-  accent: '#a05b4d',
-  t50: '#7d6464',
-  t10: '#f2eded',
+  type: 'var(--c-type)',
+  accent: 'var(--c-accent)',
+  t50: 'var(--c-t50)',
+  t10: 'var(--c-t10)',
 } as const
 
 const F = "var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -181,7 +181,7 @@ export function Nav() {
             inset: 0,
             zIndex: 100,
             fontFamily: F,
-            backgroundColor: 'rgba(255,255,255,0.97)',
+            backgroundColor: 'color-mix(in srgb, var(--c-bg) 97%, transparent)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             display: 'flex',
