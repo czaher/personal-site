@@ -21,12 +21,8 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
       style={{
-        position: 'fixed',
-        bottom: '24px',
-        left: '20px',
-        zIndex: 51,
-        width: '36px',
-        height: '36px',
+        width: '30px',
+        height: '30px',
         borderRadius: '50%',
         background: 'var(--c-t10)',
         border: '1px solid var(--c-t30)',
@@ -38,7 +34,7 @@ export function ThemeToggle() {
         flexShrink: 0,
       }}
     >
-      {dark ? <Sun size={15} strokeWidth={1.75} /> : <Moon size={15} strokeWidth={1.75} />}
+      {dark ? <Sun size={14} strokeWidth={1.75} /> : <Moon size={14} strokeWidth={1.75} />}
     </button>
   )
 }
