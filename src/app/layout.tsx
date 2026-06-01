@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import './globals.css'
 
 const manrope = Manrope({
@@ -30,7 +29,6 @@ export default function RootLayout({
       </head>
       <body className={`${manrope.variable} antialiased`}>
         {children}
-        <ThemeToggle />
       </body>
     </html>
   )

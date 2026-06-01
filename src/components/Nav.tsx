@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Menu, X, Mail, Link, Download, type LucideIcon } from 'lucide-react'
+import { ThemeToggle } from './ThemeToggle'
 
 const C = {
   type: 'var(--c-type)',
@@ -133,6 +134,10 @@ export function Nav() {
             ))}
           </div>
         </div>
+
+        <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
+          <ThemeToggle />
+        </div>
       </nav>
 
       {/* ── Mobile top bar ── */}
@@ -149,24 +154,27 @@ export function Nav() {
         >
           Corey Zaher
         </a>
-        <button
-          ref={menuButtonRef}
-          onClick={() => setOpen(true)}
-          aria-label='Open navigation menu'
-          aria-expanded={open}
-          aria-haspopup='dialog'
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '4px',
-            color: C.type,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Menu size={20} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <ThemeToggle />
+          <button
+            ref={menuButtonRef}
+            onClick={() => setOpen(true)}
+            aria-label='Open navigation menu'
+            aria-expanded={open}
+            aria-haspopup='dialog'
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '4px',
+              color: C.type,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Menu size={20} />
+          </button>
+        </div>
       </div>
 
       {/* ── Mobile overlay ── */}
