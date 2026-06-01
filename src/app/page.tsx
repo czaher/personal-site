@@ -2,12 +2,12 @@ import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 
 const C = {
-  type: '#3B2F2F',
-  accent: '#a05b4d',
-  t70: '#7a6060',
-  t50: '#7d6464',
-  t30: '#cdbfbf',
-  t10: '#f2eded',
+  type: 'var(--c-type)',
+  accent: 'var(--c-accent)',
+  t70: 'var(--c-t70)',
+  t50: 'var(--c-t50)',
+  t30: 'var(--c-t30)',
+  t10: 'var(--c-t10)',
 } as const
 
 const F = "var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -189,8 +189,8 @@ function ClientContext() {
           Fortune 500
         </div>
         <div style={{ fontSize: '11pt', color: C.t70, lineHeight: 1.6 }}>
-          Supplier performance management platform serving McDonald&apos;s and Meta,
-          among others.
+          Supplier performance management platform serving McDonald&apos;s and
+          Meta, among others.
         </div>
       </div>
       <div style={{ paddingTop: '20px', borderTop: `1px solid ${C.t10}` }}>
@@ -238,7 +238,7 @@ function GrowthArc() {
     { title: 'Project Lead', detail: 'Scrum, sprint planning, retrospectives' },
     {
       title: 'Product Engineer',
-      detail: 'Requirements, wireframes, high-fidelity Figma',
+      detail: 'Requirements, wireframes, high-fidelity mockups',
     },
   ]
   return (
@@ -346,17 +346,11 @@ function ExperienceSection({
   const hasVisual = !!visual
 
   return (
-    <div id={id} style={{ padding: '64px 48px', position: 'relative' }}>
+    <div id={id} className='experience-section'>
       {!isLast && (
         <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: '48px',
-            right: '48px',
-            height: '1px',
-            backgroundColor: C.t10,
-          }}
+          className='experience-divider'
+          style={{ backgroundColor: C.t10 }}
         />
       )}
       <div style={{ maxWidth: '960px', margin: '0 auto' }}>
@@ -418,14 +412,7 @@ function ExperienceSection({
         </div>
 
         {/* Body */}
-        <div
-          style={{
-            display: hasVisual ? 'grid' : 'block',
-            gridTemplateColumns: hasVisual ? '1fr 320px' : undefined,
-            gap: hasVisual ? '56px' : undefined,
-            alignItems: 'flex-start',
-          }}
-        >
+        <div className={hasVisual ? 'experience-body--has-visual' : undefined}>
           <div>
             {summary && (
               <p
@@ -455,7 +442,7 @@ export default function Home() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--c-bg)',
         fontFamily: F,
         color: C.type,
       }}

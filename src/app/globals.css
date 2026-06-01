@@ -129,9 +129,35 @@
   font-display: swap;
 }
 
+/* ── Site color palette ── */
+:root {
+  --c-bg: #ffffff;
+  --c-type: #3B2F2F;
+  --c-accent: #a05b4d;
+  --c-t70: #7a6060;
+  --c-t50: #7d6464;
+  --c-t30: #cdbfbf;
+  --c-t10: #f2eded;
+}
+
+.dark {
+  --c-bg: #1e1616;
+  --c-type: #f0e8e8;
+  --c-accent: #c97363;
+  --c-t70: #cdbfbf;
+  --c-t50: #b09898;
+  --c-t30: #4a3838;
+  --c-t10: #2a1f1f;
+}
+
 html {
   scroll-behavior: smooth;
   font-family: var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--c-bg);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* ── Skip navigation ── */
@@ -139,8 +165,8 @@ html {
   position: absolute;
   top: -100%;
   left: 16px;
-  background: #3B2F2F;
-  color: #ffffff;
+  background: var(--c-type);
+  color: var(--c-bg);
   padding: 8px 16px;
   text-decoration: none;
   z-index: 9999;
@@ -169,7 +195,7 @@ html {
   padding: 48px 20px;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--c-bg);
   z-index: 50;
   border: none;
   outline: none;
@@ -183,20 +209,20 @@ html {
   padding: 5px 0;
   text-decoration: none;
   font-size: 9pt;
-  color: #7a6060;
+  color: var(--c-t70);
   transition: color 0.15s ease;
   border-radius: 2px;
 }
 .sidebar-item:hover {
-  color: #a05b4d;
+  color: var(--c-accent);
 }
 .sidebar-item:focus-visible {
-  outline: 2px solid #a05b4d;
+  outline: 2px solid var(--c-accent);
   outline-offset: 2px;
 }
 .sidebar-year {
   font-size: 8.5pt;
-  color: #7d6464;
+  color: var(--c-t50);
   white-space: nowrap;
   margin-left: 4px;
 }
@@ -207,15 +233,15 @@ html {
   padding: 4px 0;
   text-decoration: none;
   font-size: 9pt;
-  color: #7a6060;
+  color: var(--c-t70);
   transition: color 0.15s ease;
   border-radius: 2px;
 }
 .sidebar-contact-item:hover {
-  color: #a05b4d;
+  color: var(--c-accent);
 }
 .sidebar-contact-item:focus-visible {
-  outline: 2px solid #a05b4d;
+  outline: 2px solid var(--c-accent);
   outline-offset: 2px;
 }
 
@@ -226,6 +252,27 @@ html {
 /* ── Page content offset ── */
 .page-content {
   margin-left: 220px;
+}
+
+/* ── Experience section layout ── */
+.experience-section {
+  padding: 64px 48px;
+  position: relative;
+}
+
+.experience-divider {
+  position: absolute;
+  bottom: 0;
+  left: 48px;
+  right: 48px;
+  height: 1px;
+}
+
+.experience-body--has-visual {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 56px;
+  align-items: flex-start;
 }
 
 @media print {
@@ -249,8 +296,8 @@ html {
     justify-content: space-between;
     align-items: center;
     padding: 14px 24px;
-    border-bottom: 1px solid #f2eded;
-    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--c-t10);
+    background: color-mix(in srgb, var(--c-bg) 90%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     position: sticky;
@@ -265,6 +312,21 @@ html {
 
   .hero-frame {
     display: none;
+  }
+
+  .experience-section {
+    padding: 40px 24px;
+  }
+
+  .experience-divider {
+    left: 24px;
+    right: 24px;
+  }
+
+  .experience-body--has-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
   }
 
 }
