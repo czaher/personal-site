@@ -12,7 +12,311 @@ const C = {
 
 const F = "var(--font-manrope), 'Helvetica Neue', Helvetica, Arial, sans-serif"
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Shared primitives ──────────────────────────────────────────────────────────
+
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        fontSize: '9pt',
+        fontWeight: 500,
+        color: C.t50,
+        backgroundColor: C.t10,
+        borderRadius: '3px',
+        padding: '2px 8px',
+      }}
+    >
+      {children}
+    </span>
+  )
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul
+      style={{
+        margin: 0,
+        padding: 0,
+        listStyle: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+      }}
+    >
+      {items.map((item, i) => (
+        <li
+          key={i}
+          style={{
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'flex-start',
+            fontSize: '11pt',
+            color: C.t70,
+            lineHeight: 1.6,
+          }}
+        >
+          <span
+            style={{
+              width: '5px',
+              height: '5px',
+              borderRadius: '50%',
+              background: C.accent,
+              flexShrink: 0,
+              marginTop: '7px',
+            }}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// ── Role-specific visuals ──────────────────────────────────────────────────────
+
+/** LCS Design System Specialist: editorial pull-stats, not metric cards */
+function AuditBlock() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '28px',
+        paddingTop: '4px',
+      }}
+    >
+      <div>
+        <div
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            marginBottom: '4px',
+            fontWeight: 500,
+          }}
+        >
+          UI audit scope
+        </div>
+        <div
+          style={{
+            fontSize: '32pt',
+            fontWeight: 800,
+            color: C.type,
+            letterSpacing: '-0.025em',
+            lineHeight: 1.05,
+          }}
+        >
+          550+ issues
+        </div>
+        <div style={{ fontSize: '11pt', color: C.t70, marginTop: '4px' }}>
+          across 182 product features in Rent Manager Express
+        </div>
+      </div>
+      <div>
+        <div
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            marginBottom: '4px',
+            fontWeight: 500,
+          }}
+        >
+          ML-powered audit pipeline
+        </div>
+        <div
+          style={{
+            fontSize: '32pt',
+            fontWeight: 800,
+            color: C.type,
+            letterSpacing: '-0.025em',
+            lineHeight: 1.05,
+          }}
+        >
+          92% precision
+        </div>
+        <div style={{ fontSize: '11pt', color: C.t70, marginTop: '4px' }}>
+          component identification on a trained subset, via YOLOv8 and
+          OmniParser
+        </div>
+      </div>
+      <div style={{ paddingTop: '4px', borderTop: `1px solid ${C.t10}` }}>
+        <div
+          style={{
+            fontSize: '9pt',
+            color: C.t50,
+            lineHeight: 1.7,
+            fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace',
+          }}
+        >
+          YOLOv8 · OmniParser · Claude Code · Figma API · Figma Plugins
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** SupplyHive: client context as editorial note, not cards */
+function ClientContext() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        paddingTop: '4px',
+      }}
+    >
+      <div>
+        <div
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            marginBottom: '6px',
+            fontWeight: 500,
+          }}
+        >
+          Client context
+        </div>
+        <div
+          style={{
+            fontSize: '13pt',
+            fontWeight: 700,
+            color: C.type,
+            lineHeight: 1.3,
+            marginBottom: '6px',
+          }}
+        >
+          Fortune 500
+        </div>
+        <div style={{ fontSize: '11pt', color: C.t70, lineHeight: 1.6 }}>
+          Supplier performance management platform serving McDonald's and Meta,
+          among others.
+        </div>
+      </div>
+      <div style={{ paddingTop: '20px', borderTop: `1px solid ${C.t10}` }}>
+        <div
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            marginBottom: '10px',
+            fontWeight: 500,
+          }}
+        >
+          What I owned
+        </div>
+        {[
+          'Requirements from C-suite stakeholders',
+          'High-fidelity UI and component library',
+          'Developer handoff and Agile ceremonies',
+          'Marketing site and client email campaigns',
+        ].map((item, i) => (
+          <div
+            key={i}
+            style={{
+              padding: '8px 0',
+              borderBottom: i < 3 ? `1px solid ${C.t10}` : 'none',
+              fontSize: '10.5pt',
+              color: C.t70,
+              lineHeight: 1.5,
+            }}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Refract Labs: role evolution arc */
+function GrowthArc() {
+  const stages = [
+    {
+      title: 'Frontend Dev',
+      detail: 'Web apps for startup and enterprise clients',
+    },
+    { title: 'Project Lead', detail: 'Scrum, sprint planning, retrospectives' },
+    {
+      title: 'Product Engineer',
+      detail: 'Requirements, wireframes, high-fidelity Figma',
+    },
+  ]
+  return (
+    <div style={{ paddingTop: '4px' }}>
+      <div
+        style={{
+          fontSize: '9pt',
+          color: C.t30,
+          marginBottom: '20px',
+          fontWeight: 500,
+        }}
+      >
+        Role evolution as 4th hire
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+        {stages.map((stage, i) => (
+          <div
+            key={stage.title}
+            style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}
+          >
+            {/* Timeline line */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                flexShrink: 0,
+                width: '20px',
+              }}
+            >
+              <div
+                style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: i === stages.length - 1 ? C.accent : C.t30,
+                  flexShrink: 0,
+                  marginTop: '4px',
+                }}
+              />
+              {i < stages.length - 1 && (
+                <div
+                  style={{
+                    width: '1px',
+                    background: C.t10,
+                    flex: 1,
+                    minHeight: '28px',
+                    marginTop: '4px',
+                  }}
+                />
+              )}
+            </div>
+            {/* Content */}
+            <div
+              style={{ paddingBottom: i < stages.length - 1 ? '20px' : '0' }}
+            >
+              <div
+                style={{
+                  fontSize: '11pt',
+                  fontWeight: 700,
+                  color: C.type,
+                  marginBottom: '2px',
+                }}
+              >
+                {stage.title}
+              </div>
+              <div style={{ fontSize: '10pt', color: C.t50, lineHeight: 1.5 }}>
+                {stage.detail}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── ExperienceSection ──────────────────────────────────────────────────────────
 
 function ExperienceSection({
   id,
@@ -22,6 +326,10 @@ function ExperienceSection({
   logo,
   logoShape = 'circle',
   isLast,
+  tags,
+  summary,
+  bullets,
+  visual,
 }: {
   id?: string
   role: string
@@ -30,27 +338,35 @@ function ExperienceSection({
   logo: string
   logoShape?: 'circle' | 'rounded'
   isLast?: boolean
+  tags?: string[]
+  summary?: string
+  bullets?: string[]
+  visual?: React.ReactNode
 }) {
+  const hasVisual = !!visual
+
   return (
     <div id={id} style={{ padding: '64px 48px', position: 'relative' }}>
       {!isLast && (
-        <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: '48px',
-          right: '48px',
-          height: '1px',
-          backgroundColor: C.t10,
-        }} />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: '48px',
+            right: '48px',
+            height: '1px',
+            backgroundColor: C.t10,
+          }}
+        />
       )}
       <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '40px' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '36px' }}>
           <p
             style={{
               fontSize: '10pt',
               color: C.t50,
-              marginBottom: '8px',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               textTransform: 'uppercase',
               margin: '0 0 8px 0',
             }}
@@ -64,7 +380,7 @@ function ExperienceSection({
               color: C.type,
               letterSpacing: '-0.02em',
               lineHeight: 1.1,
-              margin: 0,
+              margin: '0 0 10px 0',
             }}
           >
             {role}
@@ -74,7 +390,7 @@ function ExperienceSection({
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              marginTop: '8px',
+              marginBottom: tags?.length ? '14px' : '0',
             }}
           >
             <Image
@@ -92,20 +408,40 @@ function ExperienceSection({
               {company}
             </div>
           </div>
+          {tags && tags.length > 0 && (
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              {tags.map((t) => (
+                <Tag key={t}>{t}</Tag>
+              ))}
+            </div>
+          )}
         </div>
 
+        {/* Body */}
         <div
           style={{
-            border: `1px dashed ${C.t30}`,
-            borderRadius: '8px',
-            padding: '48px 32px',
-            color: C.t50,
-            fontSize: '11pt',
-            textAlign: 'center',
-            fontStyle: 'italic',
+            display: hasVisual ? 'grid' : 'block',
+            gridTemplateColumns: hasVisual ? '1fr 320px' : undefined,
+            gap: hasVisual ? '56px' : undefined,
+            alignItems: 'flex-start',
           }}
         >
-          Projects coming soon
+          <div>
+            {summary && (
+              <p
+                style={{
+                  fontSize: '11pt',
+                  color: C.t70,
+                  lineHeight: 1.65,
+                  margin: '0 0 20px 0',
+                }}
+              >
+                {summary}
+              </p>
+            )}
+            {bullets && <BulletList items={bullets} />}
+          </div>
+          {visual && <div>{visual}</div>}
         </div>
       </div>
     </div>
@@ -124,12 +460,18 @@ export default function Home() {
         color: C.type,
       }}
     >
-      <a href='#main-content' className='skip-link'>Skip to main content</a>
+      <a href='#main-content' className='skip-link'>
+        Skip to main content
+      </a>
       <Nav />
 
       <main id='main-content' className='page-content'>
-        {/* ── Hero ────────────────────────────────────────────── */}
-        <section id='home' aria-labelledby='page-heading' style={{ padding: '120px 48px 100px' }}>
+        {/* ── Hero ───────────────────────────────────────────────── */}
+        <section
+          id='home'
+          aria-labelledby='page-heading'
+          style={{ padding: '120px 48px 100px' }}
+        >
           <div
             style={{
               maxWidth: '960px',
@@ -139,7 +481,6 @@ export default function Home() {
               gap: '80px',
             }}
           >
-            {/* Text */}
             <div style={{ flex: 1 }}>
               <h1
                 id='page-heading'
@@ -165,7 +506,6 @@ export default function Home() {
               >
                 I like finding the system hiding inside the chaos.
               </p>
-
               <p
                 style={{
                   fontSize: '13pt',
@@ -180,7 +520,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Image frame */}
             <div className='hero-frame'>
               <svg
                 role='img'
@@ -208,28 +547,65 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Experience ──────────────────────────────────────── */}
-        <section aria-label='Experience' style={{ borderTop: `1px solid ${C.t10}` }}>
+        {/* ── Experience ─────────────────────────────────────────── */}
+        <section
+          aria-label='Experience'
+          style={{ borderTop: `1px solid ${C.t10}` }}
+        >
+          {/* LCS — Design System Specialist */}
           <ExperienceSection
             id='lcs'
             role='Design System Specialist'
             company='London Computer Systems'
             period='Apr. 2025 – Present'
             logo='/LCS.svg'
+            tags={['Design Systems', 'Figma', 'ML / AI', 'Plugin Development']}
+            summary="Owning the design system for Rent Manager Express, LCS's flagship property management platform. The role spans library governance, tooling, advocacy, and recently expanded into ML-powered audit infrastructure."
+            bullets={[
+              'Conducted a UI audit covering 550+ issues across 182 product features; presented findings and remediation strategy to product leadership.',
+              'Architected and led a full overhaul of the RMX Pre-made Pages library, establishing a scalable component and template ecosystem.',
+              'Built a "recycling center" Figma workflow so designers can submit finalized screens for systematic library reuse, reducing redundant work.',
+              'Developed custom Figma plugins using Claude Code to automate design system workflows.',
+              'Built an ML audit pipeline using YOLOv8 and OmniParser, reaching 92% precision on a trained component subset before the project was scoped down.',
+              'Proposed a team expansion growing the DS team from 2 to 6 specialists across product-facing and engineering-facing tracks.',
+            ]}
+            visual={<AuditBlock />}
           />
+
+          {/* LCS — UI Designer / UX Analyst */}
           <ExperienceSection
             role='UI Designer · UX Analyst'
             company='London Computer Systems'
             period='Sep. 2023 – Apr. 2025'
             logo='/LCS.svg'
+            tags={['UI Design', 'UX Research', 'Figma', 'Rent Manager']}
+            summary='Two back-to-back roles at LCS before moving into design systems work. First as a UX Analyst on Rent Manager: designing product experiences from customer research and business requirements, in close collaboration with Business Analysts. Then as UI Designer on qManage, a standalone product outside the core Rent Manager suite.'
+            bullets={[
+              'Designed product experiences for Rent Manager based on customer research, collaborating closely with Business Analysts and UI teams.',
+              'Conducted exploratory and concept-validation research to surface user pain points and inform feature development.',
+              'Designed UI components and screen flows for qManage, maintaining Figma libraries and contributing to component standardization ahead of a company-wide product restructure.',
+            ]}
           />
+
+          {/* SupplyHive */}
           <ExperienceSection
             id='supplyhive'
             role='Product Designer'
             company='SupplyHive™'
             period='May 2022 – Mar. 2023'
             logo='/SH.svg'
+            tags={['Product Design', 'B2B SaaS', 'Design Systems', 'Agile']}
+            summary='End-to-end product design for a supplier performance management platform. Clients included Fortune 500 companies; stakeholders ranged from C-suite to engineering. The role covered the full stack of product design work alongside active Agile participation with the dev team.'
+            bullets={[
+              'Owned design from C-suite requirements gathering through high-fidelity mockups and developer handoff.',
+              'Built and maintained an internal design system and component library for visual and functional consistency across the platform.',
+              'Partnered with the sales team to translate client feedback and prospect needs into new features and roadmap priorities.',
+              'Maintained the WordPress landing site and authored email newsletter campaigns for client audiences.',
+            ]}
+            visual={<ClientContext />}
           />
+
+          {/* Refract Labs */}
           <ExperienceSection
             id='refract'
             role='Product Development Engineer'
@@ -237,7 +613,22 @@ export default function Home() {
             period='Sep. 2020 – Apr. 2022'
             logo='/RL.svg'
             logoShape='rounded'
+            tags={[
+              'Frontend Development',
+              'Product Design',
+              'Project Management',
+            ]}
+            summary='Joined as the 4th employee at founding stage, building web applications for startup and enterprise clients. Grew through three distinct roles over two years: frontend developer, then project lead, then product engineer owning design and requirements end-to-end.'
+            bullets={[
+              'Built web applications for startup and enterprise clients as a founding-stage frontend developer.',
+              'Grew into a project management role leading Scrum ceremonies, sprint planning, and retrospectives across multiple client projects.',
+              'Transitioned into product engineering: owning requirements documentation, user stories, wireframes, and high-fidelity Figma mockups.',
+              'Interfaced directly with clients in prospect calls and project reviews, managing scope alignment and stakeholder expectations.',
+            ]}
+            visual={<GrowthArc />}
           />
+
+          {/* UC Lindner */}
           <ExperienceSection
             id='uc'
             role='Information Technology Consultant'
@@ -245,6 +636,13 @@ export default function Home() {
             period='Oct. 2019 – Dec. 2020'
             logo='/UC.svg'
             isLast
+            tags={['IT Support', 'Python', 'ServiceNow']}
+            summary="L1/L2 IT support for students and faculty at UC's business college. Beyond tickets, wrote Python automation scripts to connect disparate systems and reduce manual work for the team."
+            bullets={[
+              'Provided L1/L2 support to students and faculty, managing service request queues in ServiceNow.',
+              'Wrote Python automation scripts to integrate disparate technologies and improve team workflows.',
+              'Managed loaner device fleets, software license inventories, and enterprise network administration.',
+            ]}
           />
         </section>
       </main>
