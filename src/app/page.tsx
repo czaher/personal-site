@@ -189,7 +189,7 @@ function ClientContext() {
           Fortune 500
         </div>
         <div style={{ fontSize: '11pt', color: C.t70, lineHeight: 1.6 }}>
-          Supplier performance management platform serving McDonald's and Meta,
+          Supplier performance management platform serving McDonald&apos;s and Meta,
           among others.
         </div>
       </div>
