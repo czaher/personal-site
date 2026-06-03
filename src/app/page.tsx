@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Nav } from '@/components/Nav'
+import MLPipelineCanvas from '@/components/MLPipelineCanvasLoader'
 
 const C = {
   type: 'var(--c-type)',
@@ -316,6 +317,224 @@ function GrowthArc() {
   )
 }
 
+// ── ML Project Section (inside DS Specialist) ─────────────────────────────────
+
+function MLPhaseTimeline() {
+  const phases: {
+    label: string
+    sub: string
+    items: string[]
+    isFuture?: boolean
+  }[] = [
+    {
+      label: 'Phase 0',
+      sub: 'Problem identification',
+      items: [
+        '911 RMX component records, 225 preference records audited',
+        'Same components built 3–5 different ways across the product',
+        'Manual QA at scale was too costly — automation needed',
+      ],
+    },
+    {
+      label: 'Phase 1',
+      sub: 'Aug — Opportunity exploration',
+      items: [
+        'Scoped a CV solution to automate component detection',
+        'Documented component tokenization guidelines',
+        'Gathered a comprehensive screenshot dataset',
+      ],
+    },
+    {
+      label: 'Phase 2',
+      sub: 'Sept — ML Foundation',
+      items: [
+        'Annotated screenshots across 5 component types in Label Studio',
+        'Trained YOLOv8; explored Hugging Face, Colab, local hosting',
+        'Integrated OmniParser for richer UI context',
+        'Built POC detection interface',
+      ],
+    },
+    {
+      label: 'Phase 3',
+      sub: 'Oct — Refinement',
+      items: [
+        'Retrained for improved accuracy across model sizes',
+        'Researched uncertainty calculation for active learning',
+        'Hosted model locally to pre-annotate new screenshots',
+      ],
+    },
+    {
+      label: 'Future',
+      sub: 'Active Learning',
+      isFuture: true,
+      items: [
+        'Active learning loop for low-confidence predictions',
+        'Consistency scoring vs. Figma source of truth',
+        'GitLab version control + remote dev environment',
+        'Pipeline UI for running on specific screens',
+      ],
+    },
+  ]
+
+  return (
+    <div style={{ marginBottom: '40px' }}>
+      <p
+        style={{
+          fontSize: '9pt',
+          color: C.t30,
+          fontWeight: 500,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          margin: '0 0 14px 0',
+        }}
+      >
+        Timeline
+      </p>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {phases.map((phase) => (
+          <div
+            key={phase.label}
+            style={{
+              flex: 1,
+              backgroundColor: C.t10,
+              borderRadius: '8px',
+              padding: '0 0 14px 0',
+              overflow: 'hidden',
+              minWidth: 0,
+            }}
+          >
+            <div
+              style={{
+                height: '3px',
+                backgroundColor: phase.isFuture ? C.accent : C.t30,
+                marginBottom: '12px',
+                borderRadius: '8px 8px 0 0',
+              }}
+            />
+            <div style={{ padding: '0 12px' }}>
+              <div
+                style={{
+                  fontSize: '10pt',
+                  fontWeight: 700,
+                  color: C.type,
+                  marginBottom: '2px',
+                }}
+              >
+                {phase.label}
+              </div>
+              <div
+                style={{
+                  fontSize: '8.5pt',
+                  color: phase.isFuture ? C.accent : C.t50,
+                  fontWeight: phase.isFuture ? 500 : 400,
+                  marginBottom: '10px',
+                  lineHeight: 1.3,
+                }}
+              >
+                {phase.sub}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {phase.items.map((item, j) => (
+                  <div
+                    key={j}
+                    style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}
+                  >
+                    <span
+                      style={{
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: '50%',
+                        background: phase.isFuture ? C.accent : C.t30,
+                        flexShrink: 0,
+                        marginTop: '5px',
+                      }}
+                    />
+                    <span style={{ fontSize: '8.5pt', color: C.t70, lineHeight: 1.45 }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MLProjectSection() {
+  return (
+    <div
+      style={{
+        paddingTop: '36px',
+        borderTop: `1px solid ${C.t10}`,
+        marginTop: '8px',
+      }}
+    >
+      <div style={{ marginBottom: '28px' }}>
+        <span
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+          }}
+        >
+          Project
+        </span>
+        <h3
+          style={{
+            fontSize: '15pt',
+            fontWeight: 700,
+            color: C.type,
+            letterSpacing: '-0.015em',
+            margin: '4px 0 8px 0',
+          }}
+        >
+          ML Audit Pipeline
+        </h3>
+        <p
+          style={{
+            fontSize: '11pt',
+            color: C.t70,
+            lineHeight: 1.6,
+            margin: '0 0 14px 0',
+            maxWidth: '600px',
+          }}
+        >
+          Built to replace a manual audit process that couldn&apos;t scale. A
+          YOLOv8 model trained on annotated RMX screenshots to automatically
+          detect and classify UI components — reaching 92% precision on a
+          trained subset.
+        </p>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {['YOLOv8', 'Label Studio', 'OmniParser', 'Python'].map((t) => (
+            <Tag key={t}>{t}</Tag>
+          ))}
+        </div>
+      </div>
+      <MLPhaseTimeline />
+      <div style={{ marginBottom: '8px' }}>
+        <p
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            margin: '0 0 12px 0',
+          }}
+        >
+          Pipeline
+        </p>
+        <MLPipelineCanvas />
+      </div>
+    </div>
+  )
+}
+
 // ── ExperienceSection ──────────────────────────────────────────────────────────
 
 function ExperienceSection({
@@ -330,6 +549,7 @@ function ExperienceSection({
   summary,
   bullets,
   visual,
+  extra,
 }: {
   id?: string
   role: string
@@ -342,6 +562,7 @@ function ExperienceSection({
   summary?: string
   bullets?: string[]
   visual?: React.ReactNode
+  extra?: React.ReactNode
 }) {
   const hasVisual = !!visual
 
@@ -430,6 +651,7 @@ function ExperienceSection({
           </div>
           {visual && <div>{visual}</div>}
         </div>
+        {extra && <div style={{ marginTop: '48px' }}>{extra}</div>}
       </div>
     </div>
   )
@@ -557,6 +779,7 @@ export default function Home() {
               'Proposed a team expansion growing the DS team from 2 to 6 specialists across product-facing and engineering-facing tracks.',
             ]}
             visual={<AuditBlock />}
+            extra={<MLProjectSection />}
           />
 
           {/* LCS — UI Designer / UX Analyst */}
