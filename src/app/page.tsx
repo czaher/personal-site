@@ -1,5 +1,8 @@
 import Image from 'next/image'
 import { Nav } from '@/components/Nav'
+import MLPipelineCanvas from '@/components/MLPipelineCanvasLoader'
+import { loadContent } from '@/lib/content'
+import type { MLProjectData, MLPhase, ExperienceEntry } from '@/lib/defaultContent'
 
 const C = {
   type: 'var(--c-type)',
@@ -316,6 +319,165 @@ function GrowthArc() {
   )
 }
 
+// ── ML Project Section (inside DS Specialist) ─────────────────────────────────
+
+function MLPhaseTimeline({ phases }: { phases: MLPhase[] }) {
+  return (
+    <div style={{ marginBottom: '40px' }}>
+      <p
+        style={{
+          fontSize: '9pt',
+          color: C.t30,
+          fontWeight: 500,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          margin: '0 0 14px 0',
+        }}
+      >
+        Timeline
+      </p>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {phases.map((phase) => (
+          <div
+            key={phase.label}
+            style={{
+              flex: 1,
+              backgroundColor: C.t10,
+              borderRadius: '8px',
+              padding: '0 0 14px 0',
+              overflow: 'hidden',
+              minWidth: 0,
+            }}
+          >
+            <div
+              style={{
+                height: '3px',
+                backgroundColor: phase.isFuture ? C.accent : C.t30,
+                marginBottom: '12px',
+                borderRadius: '8px 8px 0 0',
+              }}
+            />
+            <div style={{ padding: '0 12px' }}>
+              <div
+                style={{
+                  fontSize: '10pt',
+                  fontWeight: 700,
+                  color: C.type,
+                  marginBottom: '2px',
+                }}
+              >
+                {phase.label}
+              </div>
+              <div
+                style={{
+                  fontSize: '8.5pt',
+                  color: phase.isFuture ? C.accent : C.t50,
+                  fontWeight: phase.isFuture ? 500 : 400,
+                  marginBottom: '10px',
+                  lineHeight: 1.3,
+                }}
+              >
+                {phase.sub}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {phase.items.map((item, j) => (
+                  <div
+                    key={j}
+                    style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}
+                  >
+                    <span
+                      style={{
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: '50%',
+                        background: phase.isFuture ? C.accent : C.t30,
+                        flexShrink: 0,
+                        marginTop: '5px',
+                      }}
+                    />
+                    <span style={{ fontSize: '8.5pt', color: C.t70, lineHeight: 1.45 }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MLProjectSection({ mlProject }: { mlProject: MLProjectData }) {
+  return (
+    <div
+      style={{
+        paddingTop: '36px',
+        borderTop: `1px solid ${C.t10}`,
+        marginTop: '8px',
+      }}
+    >
+      <div style={{ marginBottom: '28px' }}>
+        <span
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+          }}
+        >
+          Project
+        </span>
+        <h3
+          style={{
+            fontSize: '15pt',
+            fontWeight: 700,
+            color: C.type,
+            letterSpacing: '-0.015em',
+            margin: '4px 0 8px 0',
+          }}
+        >
+          {mlProject.title}
+        </h3>
+        <p
+          style={{
+            fontSize: '11pt',
+            color: C.t70,
+            lineHeight: 1.6,
+            margin: '0 0 14px 0',
+            maxWidth: '600px',
+          }}
+        >
+          {mlProject.description}
+        </p>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {mlProject.tags.map((t) => (
+            <Tag key={t}>{t}</Tag>
+          ))}
+        </div>
+      </div>
+      <MLPhaseTimeline phases={mlProject.phases} />
+      <div style={{ marginBottom: '8px' }}>
+        <p
+          style={{
+            fontSize: '9pt',
+            color: C.t30,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            margin: '0 0 12px 0',
+          }}
+        >
+          Pipeline
+        </p>
+        <MLPipelineCanvas />
+      </div>
+    </div>
+  )
+}
+
 // ── ExperienceSection ──────────────────────────────────────────────────────────
 
 function ExperienceSection({
@@ -330,6 +492,7 @@ function ExperienceSection({
   summary,
   bullets,
   visual,
+  extra,
 }: {
   id?: string
   role: string
@@ -342,6 +505,7 @@ function ExperienceSection({
   summary?: string
   bullets?: string[]
   visual?: React.ReactNode
+  extra?: React.ReactNode
 }) {
   const hasVisual = !!visual
 
@@ -430,14 +594,32 @@ function ExperienceSection({
           </div>
           {visual && <div>{visual}</div>}
         </div>
+        {extra && <div style={{ marginTop: '48px' }}>{extra}</div>}
       </div>
     </div>
   )
 }
 
+// ── Visual/extra component registry ───────────────────────────────────────────
+
+function getVisual(key: string | undefined): React.ReactNode {
+  if (key === 'auditBlock')    return <AuditBlock />
+  if (key === 'clientContext') return <ClientContext />
+  if (key === 'growthArc')     return <GrowthArc />
+  return undefined
+}
+
+function getExtra(key: string | undefined, mlProject: MLProjectData): React.ReactNode {
+  if (key === 'mlProject') return <MLProjectSection mlProject={mlProject} />
+  return undefined
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const content = loadContent()
+  const { hero, experience, mlProject } = content
+
   return (
     <div
       style={{
@@ -480,7 +662,7 @@ export default function Home() {
                   margin: '0 0 28px 0',
                 }}
               >
-                Hey, I&apos;m Corey
+                {hero.heading}
               </h1>
               <p
                 style={{
@@ -491,7 +673,7 @@ export default function Home() {
                   margin: '0 0 20px 0',
                 }}
               >
-                I like finding the system hiding inside the chaos.
+                {hero.tagline}
               </p>
               <p
                 style={{
@@ -501,9 +683,7 @@ export default function Home() {
                   marginBottom: '44px',
                 }}
               >
-                I&apos;m a design systems specialist who finds real satisfaction
-                in making things neat, flexible, and built to last. Currently at
-                London Computer Systems in Cincinnati, OH.
+                {hero.bio}
               </p>
             </div>
 
@@ -539,98 +719,15 @@ export default function Home() {
           aria-label='Experience'
           style={{ borderTop: `1px solid ${C.t10}` }}
         >
-          {/* LCS — Design System Specialist */}
-          <ExperienceSection
-            id='lcs'
-            role='Design System Specialist'
-            company='London Computer Systems'
-            period='Apr. 2025 – Present'
-            logo='/LCS.svg'
-            tags={['Design Systems', 'Figma', 'ML / AI', 'Plugin Development']}
-            summary="Owning the design system for Rent Manager Express, LCS's flagship property management platform. The role spans library governance, tooling, advocacy, and recently expanded into ML-powered audit infrastructure."
-            bullets={[
-              'Conducted a UI audit covering 550+ issues across 182 product features; presented findings and remediation strategy to product leadership.',
-              'Architected and led a full overhaul of the RMX Pre-made Pages library, establishing a scalable component and template ecosystem.',
-              'Built a "recycling center" Figma workflow so designers can submit finalized screens for systematic library reuse, reducing redundant work.',
-              'Developed custom Figma plugins using Claude Code to automate design system workflows.',
-              'Built an ML audit pipeline using YOLOv8 and OmniParser, reaching 92% precision on a trained component subset before the project was scoped down.',
-              'Proposed a team expansion growing the DS team from 2 to 6 specialists across product-facing and engineering-facing tracks.',
-            ]}
-            visual={<AuditBlock />}
-          />
-
-          {/* LCS — UI Designer / UX Analyst */}
-          <ExperienceSection
-            role='UI Designer · UX Analyst'
-            company='London Computer Systems'
-            period='Sep. 2023 – Apr. 2025'
-            logo='/LCS.svg'
-            tags={['UI Design', 'UX Research', 'Figma', 'Rent Manager']}
-            summary='Two back-to-back roles at LCS before moving into design systems work. First as a UX Analyst on Rent Manager: designing product experiences from customer research and business requirements, in close collaboration with Business Analysts. Then as UI Designer on qManage, a standalone product outside the core Rent Manager suite.'
-            bullets={[
-              'Designed product experiences for Rent Manager based on customer research, collaborating closely with Business Analysts and UI teams.',
-              'Conducted exploratory and concept-validation research to surface user pain points and inform feature development.',
-              'Designed UI components and screen flows for qManage, maintaining Figma libraries and contributing to component standardization ahead of a company-wide product restructure.',
-            ]}
-          />
-
-          {/* SupplyHive */}
-          <ExperienceSection
-            id='supplyhive'
-            role='Product Designer'
-            company='SupplyHive™'
-            period='May 2022 – Mar. 2023'
-            logo='/SH.svg'
-            tags={['Product Design', 'B2B SaaS', 'Design Systems', 'Agile']}
-            summary='End-to-end product design for a supplier performance management platform. Clients included Fortune 500 companies; stakeholders ranged from C-suite to engineering. The role covered the full stack of product design work alongside active Agile participation with the dev team.'
-            bullets={[
-              'Owned design from C-suite requirements gathering through high-fidelity mockups and developer handoff.',
-              'Built and maintained an internal design system and component library for visual and functional consistency across the platform.',
-              'Partnered with the sales team to translate client feedback and prospect needs into new features and roadmap priorities.',
-              'Maintained the WordPress landing site and authored email newsletter campaigns for client audiences.',
-            ]}
-            visual={<ClientContext />}
-          />
-
-          {/* Refract Labs */}
-          <ExperienceSection
-            id='refract'
-            role='Product Development Engineer'
-            company='Refract Labs LLC'
-            period='Sep. 2020 – Apr. 2022'
-            logo='/RL.svg'
-            logoShape='rounded'
-            tags={[
-              'Frontend Development',
-              'Product Design',
-              'Project Management',
-            ]}
-            summary='Joined as the 4th employee at founding stage, building web applications for startup and enterprise clients. Grew through three distinct roles over two years: frontend developer, then project lead, then product engineer owning design and requirements end-to-end.'
-            bullets={[
-              'Built web applications for startup and enterprise clients as a founding-stage frontend developer.',
-              'Grew into a project management role leading Scrum ceremonies, sprint planning, and retrospectives across multiple client projects.',
-              'Transitioned into product engineering: owning requirements documentation, user stories, wireframes, and high-fidelity Figma mockups.',
-              'Interfaced directly with clients in prospect calls and project reviews, managing scope alignment and stakeholder expectations.',
-            ]}
-            visual={<GrowthArc />}
-          />
-
-          {/* UC Lindner */}
-          <ExperienceSection
-            id='uc'
-            role='Information Technology Consultant'
-            company='UC Lindner College of Business'
-            period='Oct. 2019 – Dec. 2020'
-            logo='/UC.svg'
-            isLast
-            tags={['IT Support', 'Python', 'ServiceNow']}
-            summary="L1/L2 IT support for students and faculty at UC's business college. Beyond tickets, wrote Python automation scripts to connect disparate systems and reduce manual work for the team."
-            bullets={[
-              'Provided L1/L2 support to students and faculty, managing service request queues in ServiceNow.',
-              'Wrote Python automation scripts to integrate disparate technologies and improve team workflows.',
-              'Managed loaner device fleets, software license inventories, and enterprise network administration.',
-            ]}
-          />
+          {experience.map((exp: ExperienceEntry, i: number) => (
+            <ExperienceSection
+              key={exp.id ?? i}
+              {...exp}
+              isLast={i === experience.length - 1}
+              visual={getVisual(exp.visualKey)}
+              extra={getExtra(exp.extraKey, mlProject)}
+            />
+          ))}
         </section>
       </main>
     </div>
