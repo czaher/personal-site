@@ -52,14 +52,20 @@ interface PipeData extends Record<string, unknown> {
   detail: string
 }
 
+const invisHandle: React.CSSProperties = { opacity: 0, pointerEvents: 'none' }
+
 function PipeNode({ data, selected }: NodeProps) {
   const d = data as PipeData
   return (
     <>
-      <Handle id="top"    type="source"  position={Position.Top}    style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="left"   type="target"  position={Position.Left}   style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="right"  type="source"  position={Position.Right}  style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="bottom" type="source"  position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="top"        type="source" position={Position.Top}    style={invisHandle} />
+      <Handle id="right"      type="source" position={Position.Right}  style={invisHandle} />
+      <Handle id="bottom"     type="source" position={Position.Bottom} style={invisHandle} />
+      <Handle id="left"       type="source" position={Position.Left}   style={invisHandle} />
+      <Handle id="top-in"     type="target" position={Position.Top}    style={invisHandle} />
+      <Handle id="right-in"   type="target" position={Position.Right}  style={invisHandle} />
+      <Handle id="bottom-in"  type="target" position={Position.Bottom} style={invisHandle} />
+      <Handle id="left-in"    type="target" position={Position.Left}   style={invisHandle} />
       <div
         style={{
           background: 'var(--c-bg)',
@@ -104,10 +110,14 @@ function ProcessNode({ data, selected }: NodeProps) {
   const d = data as ProcessData
   return (
     <>
-      <Handle id="left"   type="target" position={Position.Left}   style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="top"    type="target" position={Position.Top}    style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="right"  type="source" position={Position.Right}  style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle id="bottom" type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="top"        type="source" position={Position.Top}    style={invisHandle} />
+      <Handle id="right"      type="source" position={Position.Right}  style={invisHandle} />
+      <Handle id="bottom"     type="source" position={Position.Bottom} style={invisHandle} />
+      <Handle id="left"       type="source" position={Position.Left}   style={invisHandle} />
+      <Handle id="top-in"     type="target" position={Position.Top}    style={invisHandle} />
+      <Handle id="right-in"   type="target" position={Position.Right}  style={invisHandle} />
+      <Handle id="bottom-in"  type="target" position={Position.Bottom} style={invisHandle} />
+      <Handle id="left-in"    type="target" position={Position.Left}   style={invisHandle} />
       <div
         style={{
           width: 100, height: 100,
@@ -574,10 +584,10 @@ export default function MLPipelineCanvas({
               }}
             >
               <option value="">Default</option>
-              <option value="top">Top</option>
-              <option value="right">Right</option>
-              <option value="bottom">Bottom</option>
-              <option value="left">Left</option>
+              <option value="top-in">Top</option>
+              <option value="right-in">Right</option>
+              <option value="bottom-in">Bottom</option>
+              <option value="left-in">Left</option>
             </select>
 
             {/* Edge type */}
