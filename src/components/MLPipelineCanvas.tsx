@@ -104,10 +104,10 @@ function ProcessNode({ data, selected }: NodeProps) {
   const d = data as ProcessData
   return (
     <>
-      <Handle type="target" position={Position.Left}   style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle type="target" position={Position.Top}    style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle type="source" position={Position.Right}  style={{ opacity: 0, pointerEvents: 'none' }} />
-      <Handle type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="left"   type="target" position={Position.Left}   style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="top"    type="target" position={Position.Top}    style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="right"  type="source" position={Position.Right}  style={{ opacity: 0, pointerEvents: 'none' }} />
+      <Handle id="bottom" type="source" position={Position.Bottom} style={{ opacity: 0, pointerEvents: 'none' }} />
       <div
         style={{
           width: 100, height: 100,
@@ -171,7 +171,7 @@ function SectionLabelNode({ data }: NodeProps) {
 
 // ─── Custom edge types ────────────────────────────────────────────────────────
 
-function LoopEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style }: EdgeProps) {
+function LoopEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style, selected }: EdgeProps) {
   const midY  = sourceY - 55
   const leftX = -85
   const topY  = targetY - 50
@@ -183,10 +183,11 @@ function LoopEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style }: 
     `L ${targetX} ${topY}`,
     `L ${targetX} ${targetY}`,
   ].join(' ')
-  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} />
+  const s = selected ? { ...style, stroke: 'var(--c-accent)', strokeWidth: 2.5 } : style
+  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={s} />
 }
 
-function DropRightEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style }: EdgeProps) {
+function DropRightEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style, selected }: EdgeProps) {
   const rightX = Math.max(sourceX, targetX) + 140
   const path = [
     `M ${sourceX} ${sourceY}`,
@@ -194,10 +195,11 @@ function DropRightEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, styl
     `L ${rightX}  ${targetY}`,
     `L ${targetX} ${targetY}`,
   ].join(' ')
-  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} />
+  const s = selected ? { ...style, stroke: 'var(--c-accent)', strokeWidth: 2.5 } : style
+  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={s} />
 }
 
-function LeftSideEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style }: EdgeProps) {
+function LeftSideEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style, selected }: EdgeProps) {
   const belowY = 800
   const leftX  = -110
   const path = [
@@ -207,7 +209,8 @@ function LeftSideEdge({ id, sourceX, sourceY, targetX, targetY, markerEnd, style
     `L ${leftX}   ${targetY}`,
     `L ${targetX} ${targetY}`,
   ].join(' ')
-  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} />
+  const s = selected ? { ...style, stroke: 'var(--c-accent)', strokeWidth: 2.5 } : style
+  return <BaseEdge id={id} path={path} markerEnd={markerEnd} style={s} />
 }
 
 // ─── Registries ───────────────────────────────────────────────────────────────
@@ -253,20 +256,21 @@ export default function MLPipelineCanvas({
   adminMode = false,
   onSave,
 }: MLPipelineCanvasProps) {
-  const [tab, setTab]               = useState<Tab>('training')
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const [tab, setTab]                     = useState<Tab>('training')
+  const [selectedId, setSelectedId]       = useState<string | null>(null)
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null)
+  const [saveStatus, setSaveStatus]       = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   const [trainingNodes, setTrainingNodes, onTrainingNodesChange] = useNodesState(
     (initialTrainingNodes ?? DEFAULT_TRAINING_NODES) as unknown as Node[]
   )
-  const [trainingEdges, , onTrainingEdgesChange] = useEdgesState(
+  const [trainingEdges, setTrainingEdges, onTrainingEdgesChange] = useEdgesState(
     (initialTrainingEdges ?? DEFAULT_TRAINING_EDGES) as unknown as Edge[]
   )
   const [rlNodes, setRlNodes, onRlNodesChange] = useNodesState(
     (initialRLNodes ?? DEFAULT_RL_NODES) as unknown as Node[]
   )
-  const [rlEdges, , onRlEdgesChange] = useEdgesState(
+  const [rlEdges, setRlEdges, onRlEdgesChange] = useEdgesState(
     (initialRLEdges ?? DEFAULT_RL_EDGES) as unknown as Edge[]
   )
 
@@ -288,6 +292,7 @@ export default function MLPipelineCanvas({
 
   const allNodes    = [...trainingNodes, ...rlNodes] as NodeWithDetail[]
   const selected    = selectedId ? allNodes.find((n) => n.id === selectedId) : null
+  const selectedEdge = selectedEdgeId ? activeEdges.find((e) => e.id === selectedEdgeId) : null
 
   function updateSelectedField(field: 'label' | 'detail', value: string) {
     const setter = tab === 'training' ? setTrainingNodes : setRlNodes
@@ -300,6 +305,13 @@ export default function MLPipelineCanvas({
     const setter = tab === 'training' ? setTrainingNodes : setRlNodes
     setter((ns) => ns.map((n) =>
       n.id === selectedId ? { ...n, position: { ...n.position, [axis]: value } } : n
+    ))
+  }
+
+  function updateEdgeField(field: 'sourceHandle' | 'targetHandle' | 'type', value: string) {
+    const setter = tab === 'training' ? setTrainingEdges : setRlEdges
+    setter((es) => es.map((e) =>
+      e.id === selectedEdgeId ? { ...e, [field]: value || undefined } : e
     ))
   }
 
@@ -321,10 +333,21 @@ export default function MLPipelineCanvas({
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
     if (node.type === 'pipe' || node.type === 'process') {
       setSelectedId((prev) => (prev === node.id ? null : node.id))
+      setSelectedEdgeId(null)
     }
   }, [])
 
-  const onPaneClick = useCallback(() => setSelectedId(null), [])
+  const onEdgeClick = useCallback((_: React.MouseEvent, edge: Edge) => {
+    if (adminMode) {
+      setSelectedEdgeId((prev) => (prev === edge.id ? null : edge.id))
+      setSelectedId(null)
+    }
+  }, [adminMode])
+
+  const onPaneClick = useCallback(() => {
+    setSelectedId(null)
+    setSelectedEdgeId(null)
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -416,6 +439,7 @@ export default function MLPipelineCanvas({
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           onNodeClick={onNodeClick}
+          onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           onNodesChange={onActiveNodesChange}
           onEdgesChange={onActiveEdgesChange}
@@ -454,13 +478,13 @@ export default function MLPipelineCanvas({
         )}
 
         {/* Hint (admin mode, nothing selected) */}
-        {!selectedId && adminMode && (
+        {!selectedId && !selectedEdgeId && adminMode && (
           <div style={{
             position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
             fontSize: 8.5, color: '#F59E0B', fontWeight: 500,
             pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap',
           }}>
-            Drag nodes to reposition · click a node to edit its label and detail
+            Drag nodes · click a node or edge to edit
           </div>
         )}
 
@@ -489,7 +513,97 @@ export default function MLPipelineCanvas({
           </div>
         )}
 
-        {/* Admin mode: edit panel */}
+        {/* Admin mode: edge edit panel */}
+        {adminMode && selectedEdge && (
+          <div style={{
+            position: 'absolute', bottom: 16, left: 16, width: 280,
+            background: 'var(--c-bg)',
+            border: '1px solid #F59E0B',
+            borderRadius: 10, padding: '14px 16px',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+            zIndex: 10,
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ fontSize: 8, color: '#F59E0B', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                Edge: {selectedEdgeId}
+              </div>
+              <button onClick={() => setSelectedEdgeId(null)} style={{ fontSize: 9, color: 'var(--c-t50)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                ×
+              </button>
+            </div>
+
+            <div style={{ fontSize: 8.5, color: 'var(--c-t50)', marginBottom: 12, fontFamily: 'ui-monospace, monospace' }}>
+              {selectedEdge.source} → {selectedEdge.target}
+            </div>
+
+            {/* Source handle */}
+            <label style={{ display: 'block', fontSize: 8, color: 'var(--c-t50)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+              Source Handle (exit side)
+            </label>
+            <select
+              value={selectedEdge.sourceHandle ?? ''}
+              onChange={(e) => updateEdgeField('sourceHandle', e.target.value)}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                fontSize: 10, padding: '5px 7px',
+                border: '1px solid var(--c-t10)', borderRadius: 5,
+                background: 'var(--c-bg)', color: 'var(--c-type)',
+                fontFamily: 'inherit', outline: 'none', marginBottom: 10, cursor: 'pointer',
+              }}
+            >
+              <option value="">Default</option>
+              <option value="top">Top</option>
+              <option value="right">Right</option>
+              <option value="bottom">Bottom</option>
+              <option value="left">Left</option>
+            </select>
+
+            {/* Target handle */}
+            <label style={{ display: 'block', fontSize: 8, color: 'var(--c-t50)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+              Target Handle (entry side)
+            </label>
+            <select
+              value={selectedEdge.targetHandle ?? ''}
+              onChange={(e) => updateEdgeField('targetHandle', e.target.value)}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                fontSize: 10, padding: '5px 7px',
+                border: '1px solid var(--c-t10)', borderRadius: 5,
+                background: 'var(--c-bg)', color: 'var(--c-type)',
+                fontFamily: 'inherit', outline: 'none', marginBottom: 10, cursor: 'pointer',
+              }}
+            >
+              <option value="">Default</option>
+              <option value="top">Top</option>
+              <option value="right">Right</option>
+              <option value="bottom">Bottom</option>
+              <option value="left">Left</option>
+            </select>
+
+            {/* Edge type */}
+            <label style={{ display: 'block', fontSize: 8, color: 'var(--c-t50)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+              Edge Routing
+            </label>
+            <select
+              value={selectedEdge.type ?? 'smoothstep'}
+              onChange={(e) => updateEdgeField('type', e.target.value)}
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                fontSize: 10, padding: '5px 7px',
+                border: '1px solid var(--c-t10)', borderRadius: 5,
+                background: 'var(--c-bg)', color: 'var(--c-type)',
+                fontFamily: 'inherit', outline: 'none', cursor: 'pointer',
+              }}
+            >
+              <option value="smoothstep">Smoothstep</option>
+              <option value="loop">Loop (up + left)</option>
+              <option value="dropRight">Drop Right</option>
+              <option value="leftSide">Left Side (long feedback)</option>
+            </select>
+          </div>
+        )}
+
+        {/* Admin mode: node edit panel */}
         {adminMode && selected && (
           <div style={{
             position: 'absolute', bottom: 16, left: 16, width: 280,
