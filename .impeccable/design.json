@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-10T00:00:00.000Z",
+  "title": "Design System: Corey Zaher",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Earthen Ink", "canonical": "#3B2F2F", "tonalRamp": ["#241c1c", "#2f2424", "#3B2F2F", "#574545", "#7a6060", "#a08a8a", "#cdbfbf", "#f2eded"] },
+      "terracotta": { "role": "primary", "displayName": "Terracotta", "canonical": "#a05b4d", "tonalRamp": ["#3f231d", "#5e352c", "#7d463b", "#a05b4d", "#bd7666", "#d29a8d", "#e6c4bb", "#f5e6e2"] },
+      "page-white": { "role": "neutral", "displayName": "Page White", "canonical": "#ffffff", "tonalRamp": ["#1e1616", "#2a1f1f", "#4a3838", "#7d6464", "#cdbfbf", "#f2eded", "#faf6f6", "#ffffff"] },
+      "warm-70": { "role": "neutral", "displayName": "Warm 70", "canonical": "#7a6060", "tonalRamp": ["#332828", "#473838", "#5e4a4a", "#7a6060", "#9a8080", "#bba5a5", "#d8caca", "#f2eded"] },
+      "wash-10": { "role": "neutral", "displayName": "Wash 10", "canonical": "#f2eded", "tonalRamp": ["#1e1616", "#2a1f1f", "#4a3838", "#7d6464", "#cdbfbf", "#e3d7d7", "#f2eded", "#faf6f6"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display — Momo Signature", "purpose": "The hero greeting only. Appears exactly once on the site." },
+      "headline": { "displayName": "Headline", "purpose": "Role titles in each experience section." },
+      "title": { "displayName": "Title", "purpose": "Company names (terracotta), project titles, sidebar wordmark." },
+      "body": { "displayName": "Body", "purpose": "Summaries and bullet copy at the 960px measure." },
+      "label": { "displayName": "Label", "purpose": "Periods, section eyebrows, sidebar group headers. Uppercase, tracked." },
+      "mono": { "displayName": "Mono", "purpose": "Technical credit / data lines only — never as costume." }
+    },
+    "shadows": [
+      { "name": "spotlight-lift", "value": "0 28px 72px -24px color-mix(in srgb, var(--c-type) 20%, transparent)", "purpose": "The single shadow in the system. Applied only to the floating spotlight panel and scaled by scroll progress to zero as it locks to full-bleed." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.165, 0.84, 0.44, 1)", "purpose": "The spotlight expand. Quick to open, settles gently into the lock. Disabled under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Quiet skill/stack metadata under a role header.",
+      "html": "<span class=\"ds-tag\">Design Systems</span>",
+      "css": ".ds-tag { display: inline-block; background: var(--c-t10, #f2eded); color: var(--c-t50, #7d6464); font-family: var(--font-manrope), 'Helvetica Neue', Arial, sans-serif; font-size: 9pt; font-weight: 500; border-radius: 3px; padding: 2px 8px; }"
+    },
+    {
+      "name": "Sidebar Item",
+      "kind": "nav",
+      "refersTo": "sidebar-item",
+      "description": "Left-rail work/contact link. Warm 70 at rest, terracotta on hover/focus.",
+      "html": "<a class=\"ds-sidebar-item\" href=\"#lcs\"><span>London Computer Systems</span><span class=\"ds-sidebar-year\">now</span></a>",
+      "css": ".ds-sidebar-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; text-decoration: none; font-family: var(--font-manrope), 'Helvetica Neue', Arial, sans-serif; font-size: 9pt; color: var(--c-t70, #7a6060); border-radius: 2px; transition: color 0.15s ease; } .ds-sidebar-item:hover { color: var(--c-accent, #a05b4d); } .ds-sidebar-item:focus-visible { outline: 2px solid var(--c-accent, #a05b4d); outline-offset: 2px; } .ds-sidebar-year { margin-left: auto; font-size: 8.5pt; color: var(--c-t50, #7d6464); }"
+    },
+    {
+      "name": "Spotlight Panel",
+      "kind": "card",
+      "refersTo": "spotlight-card",
+      "description": "Signature component. The headline role rests as an inset floating card and expands to full-bleed on scroll, its terracotta current-role rule fading in as it locks. Snippet shows the resting (floating) state.",
+      "html": "<div class=\"ds-spotlight\"><span class=\"ds-spotlight-bar\"></span><p class=\"ds-spotlight-eyebrow\">APR. 2025 – PRESENT</p><h2 class=\"ds-spotlight-role\">Design System Specialist</h2><div class=\"ds-spotlight-company\">London Computer Systems</div></div>",
+      "css": ".ds-spotlight { position: relative; background: var(--c-t10, #f2eded); border-radius: 24px; box-shadow: 0 28px 72px -24px color-mix(in srgb, var(--c-type, #3B2F2F) 20%, transparent); padding: 64px 48px; overflow: hidden; font-family: var(--font-manrope), 'Helvetica Neue', Arial, sans-serif; } .ds-spotlight-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--c-accent, #a05b4d); } .ds-spotlight-eyebrow { margin: 0 0 8px; font-size: 10pt; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-t50, #7d6464); } .ds-spotlight-role { margin: 0 0 10px; font-size: 26pt; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-type, #3B2F2F); } .ds-spotlight-company { font-size: 14pt; font-weight: 500; color: var(--c-accent, #a05b4d); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Specimen Sheet",
+    "overview": "A design-systems specialist's portfolio that behaves like a type-foundry specimen sheet crossed with a field notebook: everything catalogued, gridded, and consistent, but the materials are warm — earthen ink, terracotta, a single handwritten greeting. The rigor is the pitch; the warmth keeps it from reading as clinical. Restraint punctuated by a few earned signatures: a calm single-column editorial read with the drama concentrated into one moment — the current role expanding to a full-bleed spotlight — rather than scattered across every section.",
+    "keyCharacteristics": [
+      "Warm ink on true white — never neutral gray, never cream-on-cream.",
+      "One handwritten voice, used exactly once.",
+      "Single-column editorial measure; hierarchy carries the argument.",
+      "One concentrated signature moment, not repeated flourishes.",
+      "Light and dark themes, both first-class."
+    ],
+    "rules": [
+      { "name": "The Warm Ink Rule", "body": "There are no neutral grays in this system. Every tint, divider, and muted text value is a brown-warmed step derived from the ink. A cool #888 gray anywhere is a bug.", "section": "colors" },
+      { "name": "The Single Voice Rule", "body": "Terracotta appears on a small fraction of any screen — company names, the live-role bar, active states, bullets. Its rarity is what makes it read as meaning rather than decoration.", "section": "colors" },
+      { "name": "The One Script Rule", "body": "Momo Signature is used exactly once — the hero greeting. The moment it appears twice it becomes decoration and the maker's-hand effect dies.", "section": "typography" },
+      { "name": "The Grounded Spotlight Rule", "body": "Shadow is never ambient or decorative. It exists on one element (the spotlight panel) and only as a function of scroll — full while floating, gone once the panel becomes the section.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep warmth in the ink and accent on a true-white page; all grays are brown-warmed washes of the ink.",
+      "Do reserve terracotta for meaning and keep it under ~10% of any screen — the Single Voice Rule.",
+      "Do use Momo Signature exactly once and let Manrope carry everything else through weight and size.",
+      "Do concentrate motion into one earned signature moment and let hierarchy make the seniority argument.",
+      "Do ship every effect with a prefers-reduced-motion fallback and verify both themes at WCAG AA."
+    ],
+    "donts": [
+      "Don't drift toward the generic SaaS template: no hero-metric blocks, no identical feature-card grids, no gradient accents, no tracked-uppercase eyebrow above every section.",
+      "Don't repeat the spotlight expand (or any single entrance) on every section — the uniform-reflex / identical-card-grid tell is exactly what this system rejects.",
+      "Don't slide into Dribbble over-design: no glassmorphism as default, no decorative motion everywhere.",
+      "Don't let the supporting history collapse into a resume / CV dump with no point of view.",
+      "Don't reach for the trendy dark devtool look; mono is for technical credit lines only.",
+      "Don't introduce cool/neutral grays, a second display typeface, or ambient decorative shadows."
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 import MLPipelineCanvas from '@/components/MLPipelineCanvasLoader'
+import { ScrollExpandCard } from '@/components/ScrollExpandCard'
 import { loadContent } from '@/lib/content'
 import type { MLProjectData, MLPhase, ExperienceEntry } from '@/lib/defaultContent'
 
@@ -715,19 +716,36 @@ export default function Home() {
         </section>
 
         {/* ── Experience ─────────────────────────────────────────── */}
-        <section
-          aria-label='Experience'
-          style={{ borderTop: `1px solid ${C.t10}` }}
-        >
-          {experience.map((exp: ExperienceEntry, i: number) => (
-            <ExperienceSection
-              key={exp.id ?? i}
-              {...exp}
-              isLast={i === experience.length - 1}
-              visual={getVisual(exp.visualKey)}
-              extra={getExtra(exp.extraKey, mlProject)}
-            />
-          ))}
+        <section aria-label='Experience'>
+          {/* Signature spotlight: the current, headline role expands to
+              full-bleed and takes over its section as you scroll in. */}
+          {experience.length > 0 && (
+            <div style={{ padding: '40px 0' }}>
+              <ScrollExpandCard>
+                <ExperienceSection
+                  {...experience[0]}
+                  isLast
+                  visual={getVisual(experience[0].visualKey)}
+                  extra={getExtra(experience[0].extraKey, mlProject)}
+                />
+              </ScrollExpandCard>
+            </div>
+          )}
+
+          {/* Supporting history: a calm editorial stack — no repeated card. */}
+          {experience.length > 1 && (
+            <div style={{ borderTop: `1px solid ${C.t10}` }}>
+              {experience.slice(1).map((exp: ExperienceEntry, i: number, arr) => (
+                <ExperienceSection
+                  key={exp.id ?? i + 1}
+                  {...exp}
+                  isLast={i === arr.length - 1}
+                  visual={getVisual(exp.visualKey)}
+                  extra={getExtra(exp.extraKey, mlProject)}
+                />
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>
