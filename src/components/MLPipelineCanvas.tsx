@@ -291,9 +291,19 @@ export default function MLPipelineCanvas({
   }, [initialTrainingNodes])
 
   useEffect(() => {
+    if (initialTrainingEdges) setTrainingEdges(initialTrainingEdges as unknown as Edge[])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialTrainingEdges])
+
+  useEffect(() => {
     if (initialRLNodes) setRlNodes(initialRLNodes as unknown as Node[])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialRLNodes])
+
+  useEffect(() => {
+    if (initialRLEdges) setRlEdges(initialRLEdges as unknown as Edge[])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialRLEdges])
 
   const activeNodes         = tab === 'training' ? trainingNodes : rlNodes
   const activeEdges         = tab === 'training' ? trainingEdges : rlEdges

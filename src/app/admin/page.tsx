@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type {
   ContentData,
   HeroData,
@@ -618,6 +618,8 @@ export default function AdminPage() {
   const [content, setContent]   = useState<ContentData | null>(null)
   const [section, setSection]   = useState<Section>('pipeline')
   const [loading, setLoading]   = useState(false)
+  const [backupMsg, setBackupMsg] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Restore token from sessionStorage on mount
   useEffect(() => {
@@ -644,6 +646,53 @@ export default function AdminPage() {
     sessionStorage.removeItem('adminToken')
     setToken(null)
     setContent(null)
+  }
+
+  function flash(msg: string) {
+    setBackupMsg(msg)
+    setTimeout(() => setBackupMsg(null), 3500)
+  }
+
+  // Download the full content object as a local JSON backup.
+  function downloadBackup() {
+    if (!content) return
+    const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `content-backup-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  // Restore from a JSON backup: merge over current content and persist it.
+  async function restoreBackup(file: File) {
+    if (!token) return
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(await file.text())
+    } catch {
+      flash('Restore failed: not valid JSON.')
+      return
+    }
+    if (!parsed || typeof parsed !== 'object') {
+      flash('Restore failed: file is not a content backup.')
+      return
+    }
+    // Merge so any keys missing from the backup keep their current values.
+    const merged = { ...(content ?? {}), ...(parsed as Partial<ContentData>) } as ContentData
+    const res = await fetch('/api/content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(merged),
+    })
+    if (!res.ok) {
+      if (res.status === 401) { logout(); return }
+      flash('Restore failed: could not save.')
+      return
+    }
+    setContent(merged)
+    flash('Backup restored and saved.')
   }
 
   async function saveSection<K extends keyof ContentData>(key: K, value: ContentData[K]) {
@@ -700,12 +749,46 @@ export default function AdminPage() {
             Admin Mode
           </span>
         </div>
-        <button
-          onClick={logout}
-          style={{ fontSize: 10, color: 'var(--c-t50)', background: 'none', border: '1px solid var(--c-t10)', borderRadius: 6, padding: '4px 12px', cursor: 'pointer', fontFamily: 'inherit' }}
-        >
-          Log out
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {backupMsg && (
+            <span style={{ fontSize: 9.5, color: backupMsg.startsWith('Restore failed') ? '#ef4444' : '#22c55e' }}>
+              {backupMsg}
+            </span>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) restoreBackup(file)
+              e.target.value = ''
+            }}
+          />
+          <button
+            onClick={downloadBackup}
+            disabled={!content}
+            title="Download a JSON backup of all content"
+            style={{ fontSize: 10, color: 'var(--c-t50)', background: 'none', border: '1px solid var(--c-t10)', borderRadius: 6, padding: '4px 12px', cursor: content ? 'pointer' : 'default', opacity: content ? 1 : 0.5, fontFamily: 'inherit' }}
+          >
+            ↓ Backup
+          </button>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={!content}
+            title="Restore content from a JSON backup file"
+            style={{ fontSize: 10, color: 'var(--c-t50)', background: 'none', border: '1px solid var(--c-t10)', borderRadius: 6, padding: '4px 12px', cursor: content ? 'pointer' : 'default', opacity: content ? 1 : 0.5, fontFamily: 'inherit' }}
+          >
+            ↑ Restore
+          </button>
+          <button
+            onClick={logout}
+            style={{ fontSize: 10, color: 'var(--c-t50)', background: 'none', border: '1px solid var(--c-t10)', borderRadius: 6, padding: '4px 12px', cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            Log out
+          </button>
+        </div>
       </div>
 
       {/* Body */}
