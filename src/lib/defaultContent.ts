@@ -40,9 +40,8 @@ export interface ExperienceEntry {
 }
 
 export interface HeroData {
-  heading: string
-  tagline: string
-  bio: string
+  greeting: string
+  intro: string
 }
 
 export interface MLPhase {
@@ -151,9 +150,9 @@ export const DEFAULT_RL_EDGES: EdgeDef[] = [
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 export const DEFAULT_HERO: HeroData = {
-  heading: "Hey, I'm Corey",
-  tagline: 'I like finding the system hiding inside the chaos.',
-  bio: "I'm a design systems specialist who finds real satisfaction in making things neat, flexible, and built to last. Currently at London Computer Systems in Cincinnati, OH.",
+  greeting: 'Hello!',
+  intro:
+    "I'm Corey Zaher, and I'm currently working as a design systems specialist @ London Computer Systems in Cincinnati, OH.",
 }
 
 // ─── Experience ───────────────────────────────────────────────────────────────

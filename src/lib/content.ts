@@ -3,7 +3,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import type { ContentData } from './defaultContent'
+import type { ContentData, HeroData } from './defaultContent'
 import {
   DEFAULT_TRAINING_NODES,
   DEFAULT_TRAINING_EDGES,
@@ -27,6 +27,25 @@ const DEFAULTS: ContentData = {
   mlProject: DEFAULT_ML_PROJECT,
 }
 
+// Normalize the hero to the current two-section shape ({ greeting, intro }),
+// migrating any older saved content.json that still uses { heading, tagline, bio }.
+function normalizeHero(hero: unknown): HeroData {
+  if (!hero || typeof hero !== 'object') return DEFAULT_HERO
+  const h = hero as Record<string, unknown>
+  if (typeof h.greeting === 'string' || typeof h.intro === 'string') {
+    return {
+      greeting: typeof h.greeting === 'string' ? h.greeting : DEFAULT_HERO.greeting,
+      intro: typeof h.intro === 'string' ? h.intro : DEFAULT_HERO.intro,
+    }
+  }
+  // Legacy shape: fold tagline + bio into a single intro.
+  const intro = [h.tagline, h.bio].filter((v) => typeof v === 'string' && v).join(' ')
+  return {
+    greeting: typeof h.heading === 'string' ? h.heading : DEFAULT_HERO.greeting,
+    intro: intro || DEFAULT_HERO.intro,
+  }
+}
+
 export function loadContent(): ContentData {
   try {
     if (fs.existsSync(CONTENT_FILE)) {
@@ -34,7 +53,7 @@ export function loadContent(): ContentData {
       const parsed = JSON.parse(raw) as Partial<ContentData>
       return {
         pipeline: parsed.pipeline ?? DEFAULTS.pipeline,
-        hero: parsed.hero ?? DEFAULTS.hero,
+        hero: normalizeHero(parsed.hero),
         experience: parsed.experience ?? DEFAULTS.experience,
         mlProject: parsed.mlProject ?? DEFAULTS.mlProject,
       }

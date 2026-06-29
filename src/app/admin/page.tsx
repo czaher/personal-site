@@ -206,14 +206,11 @@ function HeroEditor({
   return (
     <div>
       <h2 style={sectionHeadStyle}>Hero</h2>
-      <Field label="Heading">
-        <input style={inputStyle} value={local.heading} onChange={(e) => setLocal({ ...local, heading: e.target.value })} />
+      <Field label="Greeting">
+        <input style={inputStyle} value={local.greeting} onChange={(e) => setLocal({ ...local, greeting: e.target.value })} />
       </Field>
-      <Field label="Tagline">
-        <input style={inputStyle} value={local.tagline} onChange={(e) => setLocal({ ...local, tagline: e.target.value })} />
-      </Field>
-      <Field label="Bio">
-        <textarea style={textareaStyle} rows={4} value={local.bio} onChange={(e) => setLocal({ ...local, bio: e.target.value })} />
+      <Field label="Intro">
+        <textarea style={textareaStyle} rows={4} value={local.intro} onChange={(e) => setLocal({ ...local, intro: e.target.value })} />
       </Field>
       <SaveBtn status={status} onClick={save} />
     </div>

@@ -4,6 +4,10 @@ import MLPipelineCanvas from '@/components/MLPipelineCanvasLoader'
 import { loadContent } from '@/lib/content'
 import type { MLProjectData, MLPhase, ExperienceEntry } from '@/lib/defaultContent'
 
+// Render on every request so edits saved from the admin panel (to the Railway
+// volume's content.json) show up immediately, rather than being frozen at build time.
+export const dynamic = 'force-dynamic'
+
 const C = {
   type: 'var(--c-type)',
   accent: 'var(--c-accent)',
@@ -662,7 +666,7 @@ export default function Home() {
                   margin: '0 0 28px 0',
                 }}
               >
-                {hero.heading}
+                {hero.greeting}
               </h1>
               <p
                 style={{
@@ -670,20 +674,10 @@ export default function Home() {
                   color: C.t70,
                   lineHeight: 1.45,
                   fontWeight: 400,
-                  margin: '0 0 20px 0',
-                }}
-              >
-                {hero.tagline}
-              </p>
-              <p
-                style={{
-                  fontSize: '13pt',
-                  color: C.t50,
-                  lineHeight: 1.65,
                   marginBottom: '44px',
                 }}
               >
-                {hero.bio}
+                {hero.intro}
               </p>
             </div>
 
