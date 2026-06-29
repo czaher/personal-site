@@ -325,6 +325,23 @@ export default function MLPipelineCanvas({
     ))
   }
 
+  function deleteSelectedNode() {
+    if (!selectedId) return
+    const setNodes = tab === 'training' ? setTrainingNodes : setRlNodes
+    const setEdges = tab === 'training' ? setTrainingEdges : setRlEdges
+    // Drop the node and any edges connected to it so nothing dangles.
+    setNodes((ns) => ns.filter((n) => n.id !== selectedId))
+    setEdges((es) => es.filter((e) => e.source !== selectedId && e.target !== selectedId))
+    setSelectedId(null)
+  }
+
+  function deleteSelectedEdge() {
+    if (!selectedEdgeId) return
+    const setEdges = tab === 'training' ? setTrainingEdges : setRlEdges
+    setEdges((es) => es.filter((e) => e.id !== selectedEdgeId))
+    setSelectedEdgeId(null)
+  }
+
   async function handleSave() {
     setSaveStatus('saving')
     try {
@@ -494,7 +511,7 @@ export default function MLPipelineCanvas({
             fontSize: 8.5, color: '#F59E0B', fontWeight: 500,
             pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap',
           }}>
-            Drag nodes · click a node or edge to edit
+            Drag nodes · click a node or edge to edit or delete
           </div>
         )}
 
@@ -610,6 +627,19 @@ export default function MLPipelineCanvas({
               <option value="dropRight">Drop Right</option>
               <option value="leftSide">Left Side (long feedback)</option>
             </select>
+
+            <button
+              onClick={deleteSelectedEdge}
+              style={{
+                marginTop: 12, width: '100%',
+                padding: '6px 0', fontSize: 9, fontWeight: 600,
+                border: '1px solid #ef4444', borderRadius: 6,
+                background: 'none', color: '#ef4444', cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              Delete connector
+            </button>
           </div>
         )}
 
@@ -700,6 +730,19 @@ export default function MLPipelineCanvas({
                 />
               </div>
             </div>
+
+            <button
+              onClick={deleteSelectedNode}
+              style={{
+                marginTop: 12, width: '100%',
+                padding: '6px 0', fontSize: 9, fontWeight: 600,
+                border: '1px solid #ef4444', borderRadius: 6,
+                background: 'none', color: '#ef4444', cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              Delete node &amp; its connectors
+            </button>
           </div>
         )}
       </div>
